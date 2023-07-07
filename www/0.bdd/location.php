@@ -65,7 +65,7 @@ $villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($ville as $ville): ?>
+                <?php foreach ($villes as $ville): ?>
                     <tr>
                         <td><?= htmlentities($ville['ID']) ?></td>
                         <td><?= htmlentities($ville['STREET']) ?></td>

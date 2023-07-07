@@ -65,7 +65,7 @@ $sons = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($sons as $sons): ?>
+                <?php foreach ($sons as $son): ?>
                     <tr>
                         <td><?= htmlentities($son['CD_NUMBER']) ?></td>
                         <td><?= htmlentities($son['TRACK_NUMBER']) ?></td>

@@ -62,7 +62,7 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($employee as $employee): ?>
+                <?php foreach ($employees as $employee): ?>
                     <tr>
                         <td><?= htmlentities($employee['ID']) ?></td>
                         <td><?= htmlentities($employee['FIRSTNAME']) ?></td>

@@ -72,7 +72,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($event as $event): ?>
+                <?php foreach ($events as $event): ?>
                     <tr>
                         <td><?= htmlentities($event['ID']) ?></td>
                         <td><?= htmlentities($event['NAME']) ?></td>

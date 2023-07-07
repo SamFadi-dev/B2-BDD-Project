@@ -64,7 +64,7 @@ $CDs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($CDs as $CDs): ?>
+                <?php foreach ($CDs as $CD): ?>
                     <tr>
                         <td><?= htmlentities($CD['CD_NUMBER']) ?></td>
                         <td><?= htmlentities($CD['TITLE']) ?></td>
