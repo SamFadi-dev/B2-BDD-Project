@@ -15,17 +15,21 @@ $titre_filtrer = isset($_POST['titre_filtrer']) ? $_POST['titre_filtrer'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
 
 // Récupération des CDs de la base de données
-$query = 'SELECT * FROM CD';
+$query = 'SELECT * FROM CD WHERE 1=1';
+$parameters = array();
+
 if (!empty($titre_filtrer)) {
-    $query .= " WHERE TITLE LIKE '%$titre_filtrer%'";
-    if (!empty($numero_filtrer)) {
-        $query .= " AND CD_NUMBER LIKE '%$numero_filtrer%'";
-    }
-} elseif (!empty($numero_filtrer)) {
-    $query .= " WHERE CD_NUMBER LIKE '%$numero_filtrer%'";
+    $query .= " AND TITLE LIKE :titre";
+    $parameters[':titre'] = '%' . $titre_filtrer . '%';
 }
+
+if (!empty($numero_filtrer)) {
+    $query .= " AND CD_NUMBER LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
-$stmt->execute();
+$stmt->execute($parameters);
 $CDs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -62,11 +66,11 @@ $CDs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($CDs as $CDs): ?>
                     <tr>
-                        <td><?= $CDs['CD_NUMBER'] ?></td>
-                        <td><?= $CDs['TITLE'] ?></td>
-                        <td><?= $CDs['PRODUCER'] ?></td>
-                        <td><?= $CDs['YEAR'] ?></td>
-                        <td><?= $CDs['COPIES'] ?></td>
+                        <td><?= htmlentities($CD['CD_NUMBER']) ?></td>
+                        <td><?= htmlentities($CD['TITLE']) ?></td>
+                        <td><?= htmlentities($CD['PRODUCER']) ?></td>
+                        <td><?= htmlentities($CD['YEAR']) ?></td>
+                        <td><?= htmlentities($CD['COPIES']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

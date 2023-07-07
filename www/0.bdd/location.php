@@ -15,18 +15,22 @@ $ville_filtrer = isset($_POST['ville_filtrer']) ? $_POST['ville_filtrer'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
 
 // Récupération des Villes de la base de données
-$query = 'SELECT * FROM LOCATION';
+$query = 'SELECT * FROM LOCATION WHERE 1=1';
+$parameters = array();
+
 if (!empty($ville_filtrer)) {
-    $query .= " WHERE CITY LIKE '%$ville_filtrer%'";
-    if (!empty($numero_filtrer)) {
-        $query .= " AND ID LIKE '%$numero_filtrer%'";
-    }
-} elseif (!empty($numero_filtrer)) {
-    $query .= " WHERE ID LIKE '%$numero_filtrer%'";
+    $query .= " AND CITY LIKE :ville";
+    $parameters[':ville'] = '%' . $ville_filtrer . '%';
 }
+
+if (!empty($numero_filtrer)) {
+    $query .= " AND ID LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
-$stmt->execute();
-$ville = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute($parameters);
+$villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -63,12 +67,12 @@ $ville = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($ville as $ville): ?>
                     <tr>
-                        <td><?= $ville['ID'] ?></td>
-                        <td><?= $ville['STREET'] ?></td>
-                        <td><?= $ville['CITY'] ?></td>
-                        <td><?= $ville['POSTAL_CODE'] ?></td>
-                        <td><?= $ville['COUNTRY'] ?></td>
-                        <td><?= $ville['COMMENT'] ?></td>
+                        <td><?= htmlentities($ville['ID']) ?></td>
+                        <td><?= htmlentities($ville['STREET']) ?></td>
+                        <td><?= htmlentities($ville['CITY']) ?></td>
+                        <td><?= htmlentities($ville['POSTAL_CODE']) ?></td>
+                        <td><?= htmlentities($ville['COUNTRY']) ?></td>
+                        <td><?= htmlentities($ville['COMMENT']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

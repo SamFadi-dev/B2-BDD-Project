@@ -15,18 +15,22 @@ $nom_filter = isset($_POST['nom_filter']) ? $_POST['nom_filter'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
 
 // Récupération des employées de la base de données
-$query = 'SELECT * FROM EMPLOYEE';
+$query = 'SELECT * FROM EMPLOYEE WHERE 1=1';
+$parameters = array();
+
 if (!empty($nom_filter)) {
-    $query .= " WHERE LASTNAME LIKE '%$nom_filter%'";
-    if (!empty($numero_filtrer)) {
-        $query .= " AND ID LIKE '%$numero_filtrer%'";
-    }
-} elseif (!empty($numero_filtrer)) {
-    $query .= " WHERE ID LIKE '%$numero_filtrer%'";
+    $query .= " AND LASTNAME LIKE :nom";
+    $parameters[':nom'] = '%' . $nom_filter . '%';
 }
+
+if (!empty($numero_filtrer)) {
+    $query .= " AND ID LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
-$stmt->execute();
-$employee = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute($parameters);
+$employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -60,9 +64,9 @@ $employee = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($employee as $employee): ?>
                     <tr>
-                        <td><?= $employee['ID'] ?></td>
-                        <td><?= $employee['FIRSTNAME'] ?></td>
-                        <td><?= $employee['LASTNAME'] ?></td>
+                        <td><?= htmlentities($employee['ID']) ?></td>
+                        <td><?= htmlentities($employee['FIRSTNAME']) ?></td>
+                        <td><?= htmlentities($employee['LASTNAME']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

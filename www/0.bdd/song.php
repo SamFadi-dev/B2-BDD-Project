@@ -15,17 +15,21 @@ $numero_cd_filtrer = isset($_POST['numero_cd_filtrer']) ? $_POST['numero_cd_filt
 $numero_musique_filtrer = isset($_POST['numero_musique_filtrer']) ? $_POST['numero_musique_filtrer'] : '';
 
 // Récupération des sonss de la base de données
-$query = 'SELECT * FROM SONG';
+$query = 'SELECT * FROM SONG WHERE 1=1';
+$parameters = array();
+
 if (!empty($numero_cd_filtrer)) {
-    $query .= " WHERE CD_NUMBER LIKE '%$numero_cd_filtrer%'";
-    if (!empty($numero_musique_filtrer)) {
-        $query .= " AND TRACK_NUMBER LIKE '%$numero_musique_filtrer%'";
-    }
-} elseif (!empty($numero_musique_filtrer)) {
-    $query .= " WHERE TRACK_NUMBER LIKE '%$numero_musique_filtrer%'";
+    $query .= " AND CD_NUMBER LIKE :cd_number";
+    $parameters[':cd_number'] = '%' . $numero_cd_filtrer . '%';
 }
+
+if (!empty($numero_musique_filtrer)) {
+    $query .= " AND TRACK_NUMBER LIKE :track_number";
+    $parameters[':track_number'] = '%' . $numero_musique_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
-$stmt->execute();
+$stmt->execute($parameters);
 $sons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -63,12 +67,12 @@ $sons = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($sons as $sons): ?>
                     <tr>
-                        <td><?= $sons['CD_NUMBER'] ?></td>
-                        <td><?= $sons['TRACK_NUMBER'] ?></td>
-                        <td><?= $sons['TITLE'] ?></td>
-                        <td><?= $sons['ARTIST'] ?></td>
-                        <td><?= $sons['DURATION'] ?></td>
-                        <td><?= $sons['GENRE'] ?></td>
+                        <td><?= htmlentities($son['CD_NUMBER']) ?></td>
+                        <td><?= htmlentities($son['TRACK_NUMBER']) ?></td>
+                        <td><?= htmlentities($son['TITLE']) ?></td>
+                        <td><?= htmlentities($son['ARTIST']) ?></td>
+                        <td><?= htmlentities($son['DURATION']) ?></td>
+                        <td><?= htmlentities($son['GENRE']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

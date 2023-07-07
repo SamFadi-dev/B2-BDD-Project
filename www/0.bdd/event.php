@@ -15,18 +15,22 @@ $date_filtrer = isset($_POST['date_filtrer']) ? $_POST['date_filtrer'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
 
 // Récupération des events de la base de données
-$query = 'SELECT * FROM EVENT';
+$query = 'SELECT * FROM EVENT WHERE 1=1';
+$parameters = array();
+
 if (!empty($date_filtrer)) {
-    $query .= " WHERE DATE LIKE '%$date_filtrer%'";
-    if (!empty($numero_filtrer)) {
-        $query .= " AND ID LIKE '%$numero_filtrer%'";
-    }
-} elseif (!empty($numero_filtrer)) {
-    $query .= " WHERE ID LIKE '%$numero_filtrer%'";
+    $query .= " AND DATE LIKE :date";
+    $parameters[':date'] = '%' . $date_filtrer . '%';
 }
+
+if (!empty($numero_filtrer)) {
+    $query .= " AND ID LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
-$stmt->execute();
-$event = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute($parameters);
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -70,20 +74,19 @@ $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($event as $event): ?>
                     <tr>
-                        <td><?= $event['ID'] ?></td>
-                        <td><?= $event['NAME'] ?></td>
-                        <td><?= $event['DATE'] ?></td>
-                        <td><?= $event['DESCRIPTION'] ?></td>
-                        <td><?= $event['CLIENT'] ?></td>
-                        <td><?= $event['MANAGER'] ?></td>
-                        <td><?= $event['EVENT_PLANNER'] ?></td>
-                        <td><?= $event['DJ'] ?></td>
-                        <td><?= $event['THEME'] ?></td>
-                        <td><?= $event['TYPE'] ?></td>
-                        <td><?= $event['LOCATION'] ?></td>
-                        <td><?= $event['RENTAL_FEE'] ?></td>
-                        <td><?= $event['PLAYLIST'] ?></td>
-
+                        <td><?= htmlentities($event['ID']) ?></td>
+                        <td><?= htmlentities($event['NAME']) ?></td>
+                        <td><?= htmlentities($event['DATE']) ?></td>
+                        <td><?= htmlentities($event['DESCRIPTION']) ?></td>
+                        <td><?= htmlentities($event['CLIENT']) ?></td>
+                        <td><?= htmlentities($event['MANAGER']) ?></td>
+                        <td><?= htmlentities($event['EVENT_PLANNER']) ?></td>
+                        <td><?= htmlentities($event['DJ']) ?></td>
+                        <td><?= htmlentities($event['THEME']) ?></td>
+                        <td><?= htmlentities($event['TYPE']) ?></td>
+                        <td><?= htmlentities($event['LOCATION']) ?></td>
+                        <td><?= htmlentities($event['RENTAL_FEE']) ?></td>
+                        <td><?= htmlentities($event['PLAYLIST']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

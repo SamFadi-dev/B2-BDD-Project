@@ -15,17 +15,21 @@ $nom_filter = isset($_POST['nom_filter']) ? $_POST['nom_filter'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
 
 // Récupération des clients de la base de données
-$query = 'SELECT * FROM CLIENT';
+$query = 'SELECT * FROM CLIENT WHERE 1=1';
+$parameters = array();
+
 if (!empty($nom_filter)) {
-    $query .= " WHERE LAST_NAME LIKE '%$nom_filter%'";
-    if (!empty($numero_filtrer)) {
-        $query .= " AND CLIENT_NUMBER LIKE '%$numero_filtrer%'";
-    }
-} elseif (!empty($numero_filtrer)) {
-    $query .= " WHERE CLIENT_NUMBER LIKE '%$numero_filtrer%'";
+    $query .= " AND LAST_NAME LIKE :nom";
+    $parameters[':nom'] = '%' . $nom_filter . '%';
 }
+
+if (!empty($numero_filtrer)) {
+    $query .= " AND CLIENT_NUMBER LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
-$stmt->execute();
+$stmt->execute($parameters);
 $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -62,11 +66,11 @@ $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
                 <?php foreach ($clients as $client): ?>
                     <tr>
-                        <td><?= $client['CLIENT_NUMBER'] ?></td>
-                        <td><?= $client['FIRST_NAME'] ?></td>
-                        <td><?= $client['LAST_NAME'] ?></td>
-                        <td><?= $client['EMAIL_ADDRESS'] ?></td>
-                        <td><?= $client['PHONE_NUMBER'] ?></td>
+                        <td><?= htmlentities($client['CLIENT_NUMBER']) ?></td>
+                        <td><?= htmlentities($client['FIRST_NAME']) ?></td>
+                        <td><?= htmlentities($client['LAST_NAME']) ?></td>
+                        <td><?= htmlentities($client['EMAIL_ADDRESS']) ?></td>
+                        <td><?= htmlentities($client['PHONE_NUMBER']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
