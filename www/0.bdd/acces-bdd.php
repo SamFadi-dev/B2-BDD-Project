@@ -97,12 +97,12 @@ session_start();
         <?php
         echo '<h1>Choisissez la table à accéder </h1>';
         echo '<ul>';
-        echo '<li><a href="clients.php">Clients</a></li>';
-        echo '<li><a href="employee.php">Employees</a></li>';
-        echo '<li><a href="location.php">Locations</a></li>';
-        echo '<li><a href="event.php">Events</a></li>';
-        echo '<li><a href="song.php">Songs</a></li>';
-        echo '<li><a href="cd.php">CDs</a></li>';
+        echo '<li><a href="clients.php" target="_blank">Clients</a></li>';
+        echo '<li><a href="employee.php" target="_blank">Employees</a></li>';
+        echo '<li><a href="location.php" target="_blank">Locations</a></li>';
+        echo '<li><a href="event.php" target="_blank">Events</a></li>';
+        echo '<li><a href="song.php" target="_blank">Songs</a></li>';
+        echo '<li><a href="cd.php" target="_blank">CDs</a></li>';
         echo '</ul>';
         ?>
     </div>

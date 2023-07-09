@@ -19,13 +19,13 @@ $query = 'SELECT * FROM SONG WHERE 1=1';
 $parameters = array();
 
 if (!empty($numero_cd_filtrer)) {
-    $query .= " AND CD_NUMBER LIKE :cd_number";
-    $parameters[':cd_number'] = '%' . $numero_cd_filtrer . '%';
+    $query .= " AND CD_NUMBER = :cd_number";
+    $parameters[':cd_number'] = $numero_cd_filtrer;
 }
 
 if (!empty($numero_musique_filtrer)) {
-    $query .= " AND TRACK_NUMBER LIKE :track_number";
-    $parameters[':track_number'] = '%' . $numero_musique_filtrer . '%';
+    $query .= " AND TRACK_NUMBER = :track_number";
+    $parameters[':track_number'] = $numero_musique_filtrer;
 }
 
 $stmt = $bdd->prepare($query);
@@ -36,7 +36,78 @@ $sons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Sons</title>
+        <title>Songs</title>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="button"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-separator {
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
     </head>
     <body>
         <h1>Sons</h1>
@@ -81,7 +152,7 @@ $sons = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <form method="post" action="acces-bdd.php">
                 <p>
                     <input type="hTRACK_NUMBERden" name="disconnect" value="yes">
-                    <input type="submit" value="Deconnection">
+                    <input type="submit" value="Déconnexion">
                 </p>
             </form>
     </body>
