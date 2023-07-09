@@ -98,6 +98,7 @@ session_start();
 $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
 if ($bdd == NULL)
     die("Problème de connection");
+    
 $query = 'SELECT * FROM LOCATION';
 $stmt = $bdd->prepare($query);
 $stmt->execute();
