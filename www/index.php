@@ -110,7 +110,7 @@ if (isset($_SESSION['login'])) {
         <h1>WeND(Y)s Party Management System</h1>
         <ul>
             <li><a href="./0.bdd/acces-bdd.php" target="_blank">0. Acces à la base de données</a></li>
-            <li><a href="./1.mod-lieu/mod-lieu.php" target="_blank">1. Modifier une localisation</a></li>
+            <li><a href="./1.mod-lieu/gestion-lieux.php" target="_blank">1. Modifier une localisation</a></li>
             <li><a href="./2.choix-cd/choix-cd.php" target="_blank">2. Choisir son CD</a></li>
             <li><a href="./3-4.evenement-cd/evenements-cd.php" target="_blank">3/4. Tableau de bord des événements et des CDs</a></li>
             <li><a href="./5.mod-evenement/modifier-event.php" target="_blank">5. Modifier un événement</a></li>

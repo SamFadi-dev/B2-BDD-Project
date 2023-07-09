@@ -26,6 +26,8 @@ session_start();
                 die("Problème de connection");
             }
 
+            $bdd->beginTransaction(); // Begin transaction
+
             // Préparer la requête d'UPDATE
             $stmt = $bdd->prepare("UPDATE LOCATION SET STREET=?, CITY=?, POSTAL_CODE=?, COUNTRY=?, COMMENT=? WHERE ID=?");
 
@@ -40,15 +42,17 @@ session_start();
             // Exécuter la requête avec les nouvelles valeurs des champs
             $stmt->execute([$street, $city, $postalCode, $country, $comment, $id]);
 
-            // Vérifier si la suppression a réussi
+            // Vérifier si la modification a réussi
             if ($stmt->rowCount() > 0) {
-                echo "La loc a été modifié avec succès !";
+                echo "La localisation a été modifiée avec succès !";
+                $bdd->commit(); // Commit the transaction
             } else {
-                echo "Une erreur est survenue lors de la modification de la loc.";
+                echo "Une erreur est survenue lors de la modification de la localisation.";
+                $bdd->rollBack(); // Rollback the transaction
             }
             
-
         } catch (PDOException $e) {
+            $bdd->rollBack(); // Rollback the transaction in case of an exception
             echo "Une erreur est survenue lors de la modification : " . $e->getMessage();
         }
         // Fermer la connexion à la base de données
