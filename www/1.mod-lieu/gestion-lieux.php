@@ -9,6 +9,7 @@ session_start();
 <head>
     <title>1. Gestion des localisations</title>
     <script>
+        //script permettant de pré-remplir les champs du formulaire de modification
         function fillFormFields() {
             var selectedOption = document.getElementById("ville-modifier").value;
             var villeDetails = document.getElementById("ville-details-" + selectedOption).innerHTML;
@@ -138,7 +139,7 @@ $villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <label for="ville">Sélectionnez un lieu à supprimer :</label>
     <select name="ville" id="ville">
         <?php foreach ($villes as $ville): ?>
-            <option value="<?= $ville['ID'] ?>"><?= $ville['ID'] ?></option>
+            <option value="<?= $ville['ID'] ?>"><?= $ville['ID'] ?>. <?= $ville['STREET'] ?>, <?= $ville['CITY'] ?></option>
         <?php endforeach; ?>
     </select>
     <input type="submit" value="Valider">
@@ -152,7 +153,7 @@ $villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <label for="ville-modifier">Sélectionnez un lieu à modifier :</label>
         <select name="ville" id="ville-modifier" onchange="fillFormFields()">
             <?php foreach ($villes as $ville): ?>
-                <option value="<?= $ville['ID'] ?>"><?= $ville['ID'] ?></option>
+                <option value="<?= $ville['ID'] ?>"> <?= $ville['ID'] ?>. <?= $ville['STREET'] ?>, <?= $ville['CITY'] ?></option>
             <?php endforeach; ?>
         </select>
         <br>
