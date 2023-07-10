@@ -1,5 +1,7 @@
 # docker-lamp
 
+Program made by EL MASRI Sam, SICIM Merve and HOUYON Manuel 
+
 Docker example with Apache, MySql 8.0, PhpMyAdmin and Php
 
 - You can use MariaDB 10.1 if you checkout to the tag `mariadb-10.1` - contribution made by [luca-vercelli](https://github.com/luca-vercelli)

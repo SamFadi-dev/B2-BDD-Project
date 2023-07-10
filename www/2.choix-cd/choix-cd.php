@@ -1,13 +1,19 @@
 <?php
+/* The above code is a PHP script that manages a CD collection. It allows users to select a CD from a
+dropdown menu and then perform various actions on the selected CD, such as viewing the songs in the
+CD, modifying a song, adding a new song, and deleting a song. */
+
 //-------------------------------------------------
-//-----------CODE PRINCIPALE QUESTION 2------------
+//------------------ QUESTION 2 -------------------
 //-------------------------------------------------
+
 session_start();
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <title>2. Gestion des CDs</title>
+
         <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,7 +98,9 @@ session_start();
         $stmt->execute();
         $cds = $stmt->fetchAll(PDO::FETCH_ASSOC);
         ?>
-        
+
+        <div class="form-separator"></div>
+
         <h1> Sélectionnez un CD à modifier </h1>
         <form method="post" action="choix-cd.php">
             <p>
@@ -106,8 +114,11 @@ session_start();
             </p>
 
         </form>
-        <?php
 
+        <div class="form-separator"></div>
+
+        <?php
+    
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cd_choisi = $_POST['cds'];
             $query = 'SELECT * FROM SONG WHERE CD_NUMBER = :cd_choisi';
@@ -129,13 +140,16 @@ session_start();
                 }
                 
                 echo '</ul>';
+
+                echo '<div class="form-separator"></div>';
+
                 echo '<h2>Modifier une chanson</h2>';
-                echo '<form method="post" action="modifier-chanson.php">';
+                    echo '<form method="post" action="modifier-chanson.php">';
                     echo '<p>';
                     echo '<label for="chansons">Sélectionnez une chanson à modifier :</label>';
-                    echo '<select name="chansons" id="chansons">';
-                    foreach ($chansons as $chansons) {
-                        echo '<option value="'. $chansons['TRACK_NUMBER'] .'">'. $chansons['TRACK_NUMBER'] .' - '. $chansons['TITLE'] .'</option>';
+                    echo '<select name="chansons" id="chansons" onchange="actualiserChanson()">';
+                    foreach ($chansons as $chanson) {
+                        echo '<option value="'. $chanson['TRACK_NUMBER'] .'">'. $chanson['TRACK_NUMBER'] .' - '. $chanson['TITLE'] .'</option>';
                     }
                     echo '</select><br>';
                     echo '<label for="m-Titre">Titre :</label>';
@@ -146,18 +160,31 @@ session_start();
                     echo '<br>';
                     echo '<label for="m-Duree">Durée :</label>';
                     echo '<input type="time" name="m-Duree" id="m-Duree" required>';
-                    echo '<br>';
-                    echo '<label for="m-Genre">Sélectionnez un genre :</label>';
-                    echo '<select name="m-Genre" id="m-Genre">';
-                    foreach ($all_genre as $genre) {
-                        echo '<option value="'. $genre['NAME'] .'">'. $genre['NAME'] .'</option>';
-                    }
-                    echo '</select><br>';    
+                    echo '<br>';    
                     echo '<input type="submit" value="Modifier">';
                     echo '</p>';
-                echo '</form>';
+                    echo '</form>';
+                    
+                    //script pour pré remplir les champs du formulaire
+                    echo '<script>
+                    function actualiserChanson() {
+                        var selectElement = document.getElementById("chansons");
+                        var selectedId = selectElement.options[selectElement.selectedIndex].value;
+                        var chansons = ' . json_encode($chansons) . ';
+                        var chansonData = chansons.find(function(chanson) {
+                            return chanson.TRACK_NUMBER == selectedId;
+                        });
+                        document.getElementById("m-Titre").value = chansonData.TITLE;
+                        document.getElementById("m-Artiste").value = chansonData.ARTIST;
+                        document.getElementById("m-Duree").value = chansonData.DURATION;
+                    }
+                    </script>';                
+
                 ?>
                 <?php
+
+                echo '<div class="form-separator"></div>';
+
                 echo '<h2>Ajouter une chanson dans le CD</h2>';
                 $cd = $_POST['cds'];
                 
@@ -183,6 +210,7 @@ session_start();
                     echo '</p>';
                 echo '</form>';
 
+                echo '<div class="form-separator"></div>';
 
                 echo '<h2>Supprimer une chanson</h2>';
                 $cd = $_POST['cds'];
@@ -207,6 +235,7 @@ session_start();
             }
         }
     ?>
+        <div class="form-separator"></div>
         <h2> Liste des CDs </h2>
             <table>
             <thead>

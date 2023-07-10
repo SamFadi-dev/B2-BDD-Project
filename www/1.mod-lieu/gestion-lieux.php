@@ -1,7 +1,15 @@
 <?php
+/* The above code is a PHP script that manages the addition, modification, and deletion of locations in
+a database. It provides a user interface with forms to add, delete, and modify locations. It also
+displays a table with a list of existing locations. The code connects to a MySQL database, retrieves
+the locations from the "LOCATION" table, and populates the forms and table with the data. The user
+can add a new location by filling out the form and submitting it. They can also select a location
+from the table to delete or modify it. The code uses JavaScript to pre-fill the form fields */
+
 //-------------------------------------------------
-//-----------CODE PRINCIPALE QUESTION 1------------
+//------------------ QUESTION 1 -------------------
 //-------------------------------------------------
+
 session_start();
 ?>
 <!DOCTYPE html>
@@ -95,119 +103,119 @@ session_start();
     </style>
 </head>
 <body>
-<?php
-$bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
-if ($bdd == NULL)
-    die("Problème de connection");
-    
-$query = 'SELECT * FROM LOCATION';
-$stmt = $bdd->prepare($query);
-$stmt->execute();
-$villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
+    <?php
+    $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
+    if ($bdd == NULL)
+        die("Problème de connection");
+        
+    $query = 'SELECT * FROM LOCATION';
+    $stmt = $bdd->prepare($query);
+    $stmt->execute();
+    $villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
 
-<h1>Ajout, modification ou suppression d'une localisation dans la base de données</h1>
+    <h1>Ajout, modification ou suppression d'une localisation dans la base de données</h1>
 
-<div class="form-separator"></div>
+    <div class="form-separator"></div>
 
-<h2>Ajouter un lieu</h2>
-<form method="post" action="ajouter.php">
-    <p>
-        <label for="Rue">Rue :</label>
-        <input type="text" name="Rue" id="Rue" required>
-        <br>
-        <label for="Ville">Ville :</label>
-        <input type="text" name="Ville" id="Ville" required>
-        <br>
-        <label for="Code_Postale">Code Postale :</label>
-        <input type="text" name="Code_Postale" id="Code_Postale" required>
-        <br>
-        <label for="Pays">Pays :</label>
-        <input type="text" name="Pays" id="Pays" required>
-        <br>
-        <label for="Commentaire">Commentaire :</label>
-        <input type="text" name="Commentaire" id="Commentaire" required>
-        <br>
-        <input type="submit" value="Envoyer">
-    </p>
-</form>
+    <h2>Ajouter un lieu</h2>
+    <form method="post" action="ajouter.php">
+        <p>
+            <label for="Rue">Rue :</label>
+            <input type="text" name="Rue" id="Rue" required>
+            <br>
+            <label for="Ville">Ville :</label>
+            <input type="text" name="Ville" id="Ville" required>
+            <br>
+            <label for="Code_Postale">Code Postale :</label>
+            <input type="text" name="Code_Postale" id="Code_Postale" required>
+            <br>
+            <label for="Pays">Pays :</label>
+            <input type="text" name="Pays" id="Pays" required>
+            <br>
+            <label for="Commentaire">Commentaire :</label>
+            <input type="text" name="Commentaire" id="Commentaire" required>
+            <br>
+            <input type="submit" value="Envoyer">
+        </p>
+    </form>
 
-<div class="form-separator"></div>
+    <div class="form-separator"></div>
 
-<h2>Supprimer un lieu</h2>
-<form method="post" action="supprimer.php">
-    <label for="ville">Sélectionnez un lieu à supprimer :</label>
-    <select name="ville" id="ville">
-        <?php foreach ($villes as $ville): ?>
-            <option value="<?= $ville['ID'] ?>"><?= $ville['ID'] ?>. <?= $ville['STREET'] ?>, <?= $ville['CITY'] ?></option>
-        <?php endforeach; ?>
-    </select>
-    <input type="submit" value="Valider">
-</form>
-
-<div class="form-separator"></div>
-
-<h2>Modifier un lieu</h2>
-<form method="post" action="modifier.php">
-    <p>
-        <label for="ville-modifier">Sélectionnez un lieu à modifier :</label>
-        <select name="ville" id="ville-modifier" onchange="fillFormFields()">
+    <h2>Supprimer un lieu</h2>
+    <form method="post" action="supprimer.php">
+        <label for="ville">Sélectionnez un lieu à supprimer :</label>
+        <select name="ville" id="ville">
             <?php foreach ($villes as $ville): ?>
-                <option value="<?= $ville['ID'] ?>"> <?= $ville['ID'] ?>. <?= $ville['STREET'] ?>, <?= $ville['CITY'] ?></option>
+                <option value="<?= $ville['ID'] ?>"><?= $ville['ID'] ?>. <?= $ville['STREET'] ?>, <?= $ville['CITY'] ?></option>
             <?php endforeach; ?>
         </select>
-        <br>
-        <label for="Rue-modifier">Rue :</label>
-        <input type="text" name="Rue" id="Rue-modifier" required>
-        <br>
-        <label for="Ville-modifier">Ville :</label>
-        <input type="text" name="Ville" id="Ville-modifier" required>
-        <br>
-        <label for="Code_Postale-modifier">Code Postale :</label>
-        <input type="text" name="Code_Postale" id="Code_Postale-modifier" required>
-        <br>
-        <label for="Pays-modifier">Pays :</label>
-        <input type="text" name="Pays" id="Pays-modifier" required>
-        <br>
-        <label for="Commentaire-modifier">Commentaire :</label>
-        <input type="text" name="Commentaire" id="Commentaire-modifier" required>
-        <br>
-        <input type="submit" value="Envoyer">
-        <input type="button" value="Actualiser" onclick="fillFormFields()">
-    </p>
-</form>
+        <input type="submit" value="Valider">
+    </form>
 
-<div class="form-separator"></div>
+    <div class="form-separator"></div>
 
-<h2>Liste des lieux</h2>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Rue</th>
-        <th>Ville</th>
-        <th>Code postal</th>
-        <th>Pays</th>
-        <th>Commentaire</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($villes as $ville): ?>
+    <h2>Modifier un lieu</h2>
+    <form method="post" action="modifier.php">
+        <p>
+            <label for="ville-modifier">Sélectionnez un lieu à modifier :</label>
+            <select name="ville" id="ville-modifier" onchange="fillFormFields()">
+                <?php foreach ($villes as $ville): ?>
+                    <option value="<?= $ville['ID'] ?>"> <?= $ville['ID'] ?>. <?= $ville['STREET'] ?>, <?= $ville['CITY'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <br>
+            <label for="Rue-modifier">Rue :</label>
+            <input type="text" name="Rue" id="Rue-modifier" required>
+            <br>
+            <label for="Ville-modifier">Ville :</label>
+            <input type="text" name="Ville" id="Ville-modifier" required>
+            <br>
+            <label for="Code_Postale-modifier">Code Postale :</label>
+            <input type="text" name="Code_Postale" id="Code_Postale-modifier" required>
+            <br>
+            <label for="Pays-modifier">Pays :</label>
+            <input type="text" name="Pays" id="Pays-modifier" required>
+            <br>
+            <label for="Commentaire-modifier">Commentaire :</label>
+            <input type="text" name="Commentaire" id="Commentaire-modifier" required>
+            <br>
+            <input type="submit" value="Envoyer">
+            <input type="button" value="Actualiser" onclick="fillFormFields()">
+        </p>
+    </form>
+
+    <div class="form-separator"></div>
+
+    <h2>Liste des lieux</h2>
+    <table>
+        <thead>
         <tr>
-            <td><?= $ville['ID'] ?></td>
-            <td><?= $ville['STREET'] ?></td>
-            <td><?= $ville['CITY'] ?></td>
-            <td><?= $ville['POSTAL_CODE'] ?></td>
-            <td><?= $ville['COUNTRY'] ?></td>
-            <td><?= $ville['COMMENT'] ?></td>
+            <th>ID</th>
+            <th>Rue</th>
+            <th>Ville</th>
+            <th>Code postal</th>
+            <th>Pays</th>
+            <th>Commentaire</th>
         </tr>
-        <tr style="display: none;">
-            <td id="ville-details-<?= $ville['ID'] ?>">
-                <?= $ville['STREET'] ?>|<?= $ville['CITY'] ?>|<?= $ville['POSTAL_CODE'] ?>|<?= $ville['COUNTRY'] ?>|<?= $ville['COMMENT'] ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <?php foreach ($villes as $ville): ?>
+            <tr>
+                <td><?= $ville['ID'] ?></td>
+                <td><?= $ville['STREET'] ?></td>
+                <td><?= $ville['CITY'] ?></td>
+                <td><?= $ville['POSTAL_CODE'] ?></td>
+                <td><?= $ville['COUNTRY'] ?></td>
+                <td><?= $ville['COMMENT'] ?></td>
+            </tr>
+            <tr style="display: none;">
+                <td id="ville-details-<?= $ville['ID'] ?>">
+                    <?= $ville['STREET'] ?>|<?= $ville['CITY'] ?>|<?= $ville['POSTAL_CODE'] ?>|<?= $ville['COUNTRY'] ?>|<?= $ville['COMMENT'] ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
 </html>

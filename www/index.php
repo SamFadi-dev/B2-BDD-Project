@@ -109,8 +109,8 @@ if (isset($_SESSION['login'])) {
     <div class="container">
         <h1>WeND(Y)s Party Management System</h1>
         <ul>
-            <li><a href="./0.bdd/acces-bdd.php" target="_blank">0. Acces à la base de données</a></li>
-            <li><a href="./1.mod-lieu/gestion-lieux.php" target="_blank">1. Gestion de la localisation</a></li>
+            <li><a href="./0.bdd/acces-bdd.php" target="_blank">0. Accès à la base de données</a></li>
+            <li><a href="./1.mod-lieu/gestion-lieux.php" target="_blank">1. Gestion des localisations</a></li>
             <li><a href="./2.choix-cd/choix-cd.php" target="_blank">2. Gestion des CDs</a></li>
             <li><a href="./3-4.evenement-cd/evenements-cd.php" target="_blank">3/4. Tableau de bord des événements et des CDs</a></li>
             <li><a href="./5.mod-evenement/modifier-event.php" target="_blank">5. Modifier un événement</a></li>
