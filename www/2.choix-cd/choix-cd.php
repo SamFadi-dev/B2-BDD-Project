@@ -160,8 +160,11 @@ session_start();
                     echo '<br>';
                     echo '<label for="m-Duree">Durée :</label>';
                     echo '<input type="time" name="m-Duree" id="m-Duree" required>';
-                    echo '<br>';    
+                    echo '<br>';  
+                    echo '<br>';   
                     echo '<input type="submit" value="Modifier">';
+                    echo '<span style="margin-left: 10px;"></span>';
+                    echo'<input type="button" value="Pré-remplir" onclick="actualiserChanson()">';
                     echo '</p>';
                     echo '</form>';
                     

@@ -1,103 +1,142 @@
 <?php
-//-------------------------------------------------
-//-----------CODE PRINCIPAL QUESTION 6------------
-//-------------------------------------------------
 session_start();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>6. Tableau de bord des CDs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="button"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-separator {
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
     <?php
     echo '<h1>Tableau de bord des CDs</h1>';
-    $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
-    if ($bdd == NULL) {
-        die("Problème de connexion");
-    }
-    // Prend tous les CD
-    $query = "SELECT * FROM CD";
-    $stmt = $bdd->prepare($query);
-    $stmt->execute();
-    $CDs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try{
+        $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
+        if ($bdd == NULL) {
+            die("Problème de connexion");
+        }
+        $bdd->beginTransaction();
 
-    // Prend CONTAINS pour compter le nombre d'apparition des chansons d'un CD dans une playlist
-    $query = "SELECT * FROM CONTAINS";
-    $stmt = $bdd->prepare($query);
-    $stmt->execute();
-    $playlist = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    echo '<table>';
-    echo '<thead>';
-    echo '<tr>';
-    echo '<th>Titre du CD</th>';
-    echo '<th>Durée totale</th>';
-    echo '<th>Durée maximale</th>';
-    echo '<th>Durée minimale</th>';
-    echo '<th>Durée moyenne</th>';
-    echo '<th>Apparition</th>';
-    echo '<th>Genres/Sous-Genres</th>';
-    echo '</tr>';
-    echo '</thead>';
-    echo '<tbody>';
-    // Obtenir chaque CD
-    foreach ($CDs as $CD) {
-        $CD_NUMBER = $CD['CD_NUMBER'];
-        $TITLE = $CD["TITLE"];
-
-        // Requête pour obtenir la durée des chansons
-        $query = "SELECT DURATION FROM SONG WHERE CD_NUMBER = :CD_NUMBER";
+        $query = "SELECT CD.CD_NUMBER, CD.TITLE,
+                    SEC_TO_TIME(SUM(TIME_TO_SEC(SONG.DURATION))) AS total_duration,
+                    SEC_TO_TIME(MAX(TIME_TO_SEC(SONG.DURATION))) AS max_duration,
+                    SEC_TO_TIME(MIN(TIME_TO_SEC(SONG.DURATION))) AS min_duration,
+                    SEC_TO_TIME(AVG(TIME_TO_SEC(SONG.DURATION))) AS avg_duration,
+                    COUNT(CONTAINS.PLAYLIST) AS playlist_count,
+                    GROUP_CONCAT(DISTINCT GENRE.NAME SEPARATOR ', ') AS related_genres
+                FROM CD
+                LEFT JOIN SONG ON CD.CD_NUMBER = SONG.CD_NUMBER
+                LEFT JOIN CONTAINS ON CD.CD_NUMBER = CONTAINS.CD_NUMBER
+                LEFT JOIN GENRE ON SONG.GENRE = GENRE.NAME
+                GROUP BY CD.CD_NUMBER, CD.TITLE";
 
         $stmt = $bdd->prepare($query);
-        $stmt->bindParam(':CD_NUMBER', $CD_NUMBER);
         $stmt->execute();
+        $CDs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Prendre la durée de toutes les chansons du CD
-        $songs = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        $max = max($songs);
-        $min = min($songs);
-        $countSongs = count($songs);
-        $totalDuration = 0;
-        foreach ($songs as $song) {
-            $totalDuration += strtotime($song);
-        }
-        $average = $totalDuration / $countSongs;
-
-        // Prend toutes les chansons du CD apparaissant dans des playlists.
-        $playlistCount = 0;
-        // Parcourir CONTAINS et regarder si le CD_NUMBER est égal à celui du CD actuel.
-        // Si les CD_NUMBERS sont égaux, incrémenter playlistCount
-        foreach ($playlist as $element) {
-            if ($element["CD_NUMBER"] == $CD_NUMBER) {
-                $playlistCount++;
-            }
-        }
-        $query = "SELECT GROUP_CONCAT(DISTINCT GENRE.NAME SEPARATOR ', ') AS Related_Genres 
-                    FROM CD 
-                    LEFT JOIN SONG ON CD.CD_NUMBER = SONG.CD_NUMBER 
-                    LEFT JOIN CONTAINS ON CD.CD_NUMBER = CONTAINS.CD_NUMBER 
-                    LEFT JOIN GENRE ON SONG.GENRE = GENRE.NAME 
-                    WHERE CD.CD_NUMBER = :CD_NUMBER
-                    GROUP BY CD.CD_NUMBER, CD.TITLE";
-
-        $stmt = $bdd->prepare($query);
-        $stmt->bindParam(':CD_NUMBER', $CD_NUMBER);
-        $stmt->execute();
-        $genre = $stmt->fetch(PDO::FETCH_ASSOC);
-        $list = $genre["Related_Genres"];
+        echo '<table>';
+        echo '<thead>';
         echo '<tr>';
-        echo '<td>' . $TITLE . '</td>';
-        echo '<td>' . date("H:i:s", $totalDuration) . '</td>';
-        echo '<td>' . $max . '</td>';
-        echo '<td>' . $min . '</td>';
-        echo '<td>' . date("H:i:s", $average) . '</td>';
-        echo '<td>' . $playlistCount . '</td>';
-        echo '<td>' . $list . '</td>';
+        echo '<th>Titre du CD</th>';
+        echo '<th>Durée totale</th>';
+        echo '<th>Durée maximale</th>';
+        echo '<th>Durée minimale</th>';
+        echo '<th>Durée moyenne</th>';
+        echo '<th>Apparition</th>';
+        echo '<th>Genres/Sous-Genres</th>';
         echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+
+        foreach ($CDs as $CD) {
+            echo '<tr>';
+            echo '<td>' . $CD['TITLE'] . '</td>';
+            echo '<td>' . $CD['total_duration'] . '</td>';
+            echo '<td>' . $CD['max_duration'] . '</td>';
+            echo '<td>' . $CD['min_duration'] . '</td>';
+            echo '<td>' . $CD['avg_duration'] . '</td>';
+            echo '<td>' . $CD['playlist_count'] . '</td>';
+            echo '<td>' . $CD['related_genres'] . '</td>';
+            echo '</tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+
+        $bdd->commit();
+    } catch (PDOException $e) {
+        $bdd->rollback();
+        echo "Erreur : " . $e->getMessage();
     }
-    echo '</tbody>';
-    echo '</table>';
     ?>
 </body>
 </html>

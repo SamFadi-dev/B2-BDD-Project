@@ -181,7 +181,7 @@ session_start();
             <input type="text" name="Commentaire" id="Commentaire-modifier" required>
             <br>
             <input type="submit" value="Envoyer">
-            <input type="button" value="Actualiser" onclick="fillFormFields()">
+            <input type="button" value="Pré-remplir" onclick="fillFormFields()">
         </p>
     </form>
 
