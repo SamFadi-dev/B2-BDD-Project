@@ -1,14 +1,10 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
-;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */
-;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */
-;
-/*!40101 SET NAMES utf8mb4 */
-;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 /*---------------------------------------------------*/
 /* ------------Créer toutes les tables --------------*/
@@ -89,15 +85,6 @@ CREATE TABLE IF NOT EXISTS EVENT (
     FOREIGN KEY (PLAYLIST) REFERENCES PLAYLIST(NAME)
 );
 
-CREATE TABLE IF NOT EXISTS CONTAINS (
-    PLAYLIST VARCHAR(255),
-    TRACK_NUMBER INT,
-    CD_NUMBER INT,
-    PRIMARY KEY (PLAYLIST, TRACK_NUMBER, CD_NUMBER),
-    FOREIGN KEY (PLAYLIST) REFERENCES PLAYLIST(NAME) ON DELETE CASCADE,
-    FOREIGN KEY (TRACK_NUMBER, CD_NUMBER) REFERENCES SONG(TRACK_NUMBER, CD_NUMBER) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS SONG (
     CD_NUMBER INT,
     TRACK_NUMBER INT,
@@ -108,6 +95,15 @@ CREATE TABLE IF NOT EXISTS SONG (
     PRIMARY KEY (CD_NUMBER, TRACK_NUMBER),
     FOREIGN KEY (CD_NUMBER) REFERENCES CD(CD_NUMBER),
     FOREIGN KEY (GENRE) REFERENCES GENRE(NAME)
+);
+
+CREATE TABLE IF NOT EXISTS CONTAINS (
+    PLAYLIST VARCHAR(255),
+    TRACK_NUMBER INT,
+    CD_NUMBER INT,
+    PRIMARY KEY (PLAYLIST, TRACK_NUMBER, CD_NUMBER),
+    FOREIGN KEY (PLAYLIST) REFERENCES PLAYLIST(NAME) ON DELETE CASCADE,
+    FOREIGN KEY (TRACK_NUMBER, CD_NUMBER) REFERENCES SONG(TRACK_NUMBER, CD_NUMBER) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS SPECIALIZATION (
@@ -148,6 +144,7 @@ CREATE TABLE IF NOT EXISTS THEME (
 /*---------------------------------------------------*/
 /*--Load toutes les tables depuis les fichiers .csv--*/
 /*---------------------------------------------------*/
+
 
 INSERT IGNORE INTO CD (CD_NUMBER, TITLE, PRODUCER, YEAR, COPIES) VALUES
 (1, 'Ray of Light', 'William Orbit', 1998, 2),
@@ -211,11 +208,11 @@ VALUES (1, 'Karen', 'McScream'),
 
 INSERT IGNORE INTO EVENT (ID, NAME, DATE, DESCRIPTION, CLIENT, MANAGER, EVENT_PLANNER, DJ, THEME, TYPE, LOCATION, RENTAL_FEE, PLAYLIST)
 VALUES
-(1, "Madeline's Divorce Party Part I", '2023-04-01', "Madeline want to celebrate her divorce and party hard. On the first day, she want to feel a bit emotional and wants a darker theme.", 1, 1, 3, 7, 'Vampires', 'Divorce', 3, 1500, 'Vampire Mood'),
+(1, "Madeline's Divorce Party Part I", '2023-04-01', "Madeline wants to celebrate her divorce and party hard. On the first day, she wants to feel a bit emotional and wants a darker theme.", 1, 1, 3, 7, 'Vampires', 'Divorce', 3, 1500, 'Vampire Mood'),
 (2, "Vincent's Birthday Party", '2023-04-01', NULL, 5, 1, 4, 8, 'Lord of the Rings', 'Birthday', 1, 950, 'Fantasy 2'),
-(3, "Madeline's Divorce Party Part II", '2023-04-03', "Madeline want to celebrate her divorce and party hard. On the second day, she want to get back on her feet with a tropical theme. We need lots of balloons to brighten up the place.", 1, 2, 5, 9, 'Tropical', 'Divorce', 3, 1000, 'Summer Vibes'),
-(4, "Cynthia's Goodbye Party", '2023-04-03', 'Lydia wants to organise a goodbye party for her good friend Cynthia.', 9, 2, 6, 10, 'Tropical', 'Goodbye Party', 2, 9000, NULL),
-(5, "Mother's Birthday Party", '2023-04-05', "Sydney want's to organize a suprise party for her daugher who's really into vampires.", 3, 1, 3, 8, 'Vampires', 'Birthday', NULL, NULL, 'Spooky');
+(3, "Madeline's Divorce Party Part II", '2023-04-03', "Madeline wants to celebrate her divorce and party hard. On the second day, she wants to get back on her feet with a tropical theme. We need lots of balloons to brighten up the place.", 1, 2, 5, 9, 'Tropical', 'Divorce', 3, 1000, 'Summer Vibes'),
+(4, "Cynthia's Goodbye Party", '2023-04-03', 'Lydia wants to organize a goodbye party for her good friend Cynthia.', 9, 2, 6, 10, 'Tropical', 'Goodbye Party', 2, 9000, NULL),
+(5, "Mother's Birthday Party", '2023-04-05', "Sydney wants to organize a surprise party for her daughter who's really into vampires.", 3, 1, 3, 8, 'Vampires', 'Birthday', NULL, NULL, 'Spooky');
 
 INSERT IGNORE INTO EVENTPLANNER (ID) VALUES (3), (4), (5), (6);
 
@@ -247,12 +244,12 @@ VALUES
 
 INSERT IGNORE INTO LOCATION (ID, STREET, CITY, POSTAL_CODE, COUNTRY, COMMENT) 
 VALUES 
-(1, 'Rue des Lilas', 'Brussels', 1000, 'Belgium', 'Near the city center'),
-(2, 'Avenue Louise', 'Brussels', 1050, 'Belgium', 'High-end shopping district'),
-(3, 'Rue des Bouchers', 'Brussels', 1000, 'Belgium', 'Famous restaurant street'),
-(4, 'Quai des Charbonnages', 'Antwerp', 2000, 'Belgium', 'On the waterfront'),
-(5, 'Grand-Place', 'Tournai', 7500, 'Belgium', 'Historic town center'),
-(6, 'Chaussée de Louvain', 'Leuven', 3000, 'Belgium', 'University district');
+(1, 'Rue des Lilas', 'Brussels', '1000', 'Belgium', 'Near the city center'),
+(2, 'Avenue Louise', 'Brussels', '1050', 'Belgium', 'High-end shopping district'),
+(3, 'Rue des Bouchers', 'Brussels', '1000', 'Belgium', 'Famous restaurant street'),
+(4, 'Quai des Charbonnages', 'Antwerp', '2000', 'Belgium', 'On the waterfront'),
+(5, 'Grand-Place', 'Tournai', '7500', 'Belgium', 'Historic town center'),
+(6, 'Chaussée de Louvain', 'Leuven', '3000', 'Belgium', 'University district');
 
 INSERT IGNORE INTO MANAGER (ID)
 VALUES (1), (2);
@@ -344,3 +341,5 @@ VALUES
 ('Mean Girls'),
 ('Clueless'),
 ('Matrix');
+
+COMMIT;

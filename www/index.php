@@ -4,7 +4,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WeND(Y)s Party Management System</title>
+    <title>WeND(Y)s Party Management System V2</title>
     <style>
         body {
             position: relative;

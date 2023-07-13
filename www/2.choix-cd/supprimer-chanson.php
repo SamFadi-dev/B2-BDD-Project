@@ -24,17 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $bdd->beginTransaction(); // Début de la transaction
 
-        // Supprimer la musique de la table SONG et CONTAINS
-        $querySONG = "DELETE FROM SONG WHERE CD_NUMBER = :cd_number AND TRACK_NUMBER = :track_number";
-        $queryCONTAINS = "DELETE FROM CONTAINS WHERE CD_NUMBER = :cd_number AND TRACK_NUMBER = :track_number";
-        $stmtSONG = $bdd->prepare($querySONG);
-        $stmtCONTAINS = $bdd->prepare($queryCONTAINS);
-        $stmtSONG->bindValue(':cd_number', $numero_cd);
-        $stmtSONG->bindValue(':track_number', $numero_musique);
-        $stmtCONTAINS->bindValue(':cd_number', $numero_cd);
-        $stmtCONTAINS->bindValue(':track_number', $numero_musique);
+        // Supprimer la musique de la table SONG et CONTAINS en utilisant une requête JOIN
+        $query = "DELETE S, C
+                  FROM SONG AS S
+                  JOIN CONTAINS AS C ON S.CD_NUMBER = C.CD_NUMBER AND S.TRACK_NUMBER = C.TRACK_NUMBER
+                  WHERE S.CD_NUMBER = :cd_number AND S.TRACK_NUMBER = :track_number";
+        $stmt = $bdd->prepare($query);
+        $stmt->bindValue(':cd_number', $numero_cd);
+        $stmt->bindValue(':track_number', $numero_musique);
 
-        if ($stmtSONG->execute() && $stmtCONTAINS->execute()) {
+        if ($stmt->execute()) {
             echo "La chanson a été supprimée avec succès !";
             $bdd->commit(); // Valider la transaction
         } else {

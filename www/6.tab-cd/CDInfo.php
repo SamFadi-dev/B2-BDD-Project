@@ -88,11 +88,11 @@ session_start();
         $bdd->beginTransaction();
 
         $query = "SELECT CD.CD_NUMBER, CD.TITLE,
-                    SEC_TO_TIME(SUM(TIME_TO_SEC(SONG.DURATION))) AS total_duration,
-                    SEC_TO_TIME(MAX(TIME_TO_SEC(SONG.DURATION))) AS max_duration,
-                    SEC_TO_TIME(MIN(TIME_TO_SEC(SONG.DURATION))) AS min_duration,
-                    SEC_TO_TIME(AVG(TIME_TO_SEC(SONG.DURATION))) AS avg_duration,
-                    COUNT(CONTAINS.PLAYLIST) AS playlist_count,
+                    SEC_TO_TIME(SUM(TIME_TO_SEC(SONG.DURATION))) AS total_temps,
+                    SEC_TO_TIME(MAX(TIME_TO_SEC(SONG.DURATION))) AS max_temps,
+                    SEC_TO_TIME(MIN(TIME_TO_SEC(SONG.DURATION))) AS min_temps,
+                    SEC_TO_TIME(AVG(TIME_TO_SEC(SONG.DURATION))) AS avg_temps,
+                    COUNT(CONTAINS.PLAYLIST) AS playlist_nbr,
                     GROUP_CONCAT(DISTINCT GENRE.NAME SEPARATOR ', ') AS related_genres
                 FROM CD
                 LEFT JOIN SONG ON CD.CD_NUMBER = SONG.CD_NUMBER
@@ -121,11 +121,11 @@ session_start();
         foreach ($CDs as $CD) {
             echo '<tr>';
             echo '<td>' . $CD['TITLE'] . '</td>';
-            echo '<td>' . $CD['total_duration'] . '</td>';
-            echo '<td>' . $CD['max_duration'] . '</td>';
-            echo '<td>' . $CD['min_duration'] . '</td>';
-            echo '<td>' . $CD['avg_duration'] . '</td>';
-            echo '<td>' . $CD['playlist_count'] . '</td>';
+            echo '<td>' . $CD['total_temps'] . '</td>';
+            echo '<td>' . $CD['max_temps'] . '</td>';
+            echo '<td>' . $CD['min_temps'] . '</td>';
+            echo '<td>' . $CD['avg_temps'] . '</td>';
+            echo '<td>' . $CD['playlist_nbr'] . '</td>';
             echo '<td>' . $CD['related_genres'] . '</td>';
             echo '</tr>';
         }
