@@ -183,6 +183,7 @@ try {
 
             $stmt->execute([$NAME, $DESCRIPTION, $MANAGER, $EVENT_PLANNER, $DJ, $THEME, $TYPE, $LOCATION, $RENTAL_FEE, $PLAYLIST, $_POST["event"]]);
             if ($stmt->rowCount() > 0) {
+                $bdd->commit();
                 echo "Événement modifié";
             } else {
                 $error = $stmt->errorInfo();
@@ -193,7 +194,6 @@ try {
         }
     }
 
-    $bdd->commit();
 } catch (PDOException $e) {
     $bdd->rollback();
     echo "Erreur : " . $e->getMessage();
