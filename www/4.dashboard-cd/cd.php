@@ -1,13 +1,13 @@
 <?php
 //-------------------------------------------------
-//-----------CODE PRINCIPALE QUESTION 3/4----------
+//-----------CODE PRINCIPALE QUESTION 4------------
 //-------------------------------------------------
 session_start();
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>3-4. Gestion des événements</title>
+        <title>4. Gestion des CDs</title>
     </head>
     <body>
         <?php
@@ -15,72 +15,6 @@ session_start();
         if ($bdd == NULL)
             die("Problème de connection");
         ?>
-
-        <h2> Liste des événements </h2>
-        <table>
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Client</th>
-            <th>Manager</th>
-            <th>Planificateur</th>
-            <th>DJ</th>
-            <th>Thème</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Frais (€)</th>
-            <th>Playlist</th>
-            <th>Coût total (€)</th>
-            <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            <?php
-            // Requête SQL pour récupérer les données de la table EVENT
-            $query = 'SELECT * FROM EVENT ORDER BY DATE DESC, NAME ASC';
-            $stmt = $bdd->query($query);
-
-            $date = date("Y-m-d");
-            $statut = "N/A";
-
-            while ($row = $stmt->fetch()) {
-            // Affichage de chaque ligne de la table sous forme de ligne de tableau
-
-                $coutTotal = 1500 + $row['RENTAL_FEE'];
-        
-                if (strtotime($date) > strtotime($row['DATE'])) 
-                    $statut = "PASSÉ";
-                elseif (strtotime($date) < strtotime($row['DATE']))
-                    $statut = "FUTUR";
-                else 
-                    $statut = "AUJOURD'HUI";
-
-                echo "<tr>";
-                echo "<td>" . $row['ID'] . "</td>";
-                echo "<td>" . $row['NAME'] . "</td>";
-                echo "<td>" . $row['DATE'] . "</td>";
-                echo "<td>" . $row['DESCRIPTION'] . "</td>";
-                echo "<td>" . $row['CLIENT'] . "</td>";
-                echo "<td>" . $row['MANAGER'] . "</td>";
-                echo "<td>" . $row['EVENT_PLANNER'] . "</td>";
-                echo "<td>" . $row['DJ'] . "</td>";
-                echo "<td>" . $row['THEME'] . "</td>";
-                echo "<td>" . $row['TYPE'] . "</td>";
-                echo "<td>" . $row['LOCATION'] . "</td>";
-                echo "<td>" . $row['RENTAL_FEE'] . "</td>";
-                echo "<td>" . $row['PLAYLIST'] . "</td>";
-                echo "<td>" . $coutTotal . "</td>";
-                echo "<td>" . $statut . "</td>";
-                echo "</tr>";
-            }
-            ?>
-    
-        </tbody>
-        </table>   
         
         <h2> Disponibilité des CDs </h2>
 
