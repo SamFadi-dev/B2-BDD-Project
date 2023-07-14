@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------
-//-----------CODE PRINCIPALE QUESTION 4------------
+//-----------CODE PRINCIPAL QUESTION 4------------
 //-------------------------------------------------
 session_start();
 ?>
@@ -8,15 +8,87 @@ session_start();
 <html>
     <head>
         <title>4. Gestion des CDs</title>
+        <style>
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="button"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-separator {
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
     </head>
     <body>
         <?php
         $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
         if ($bdd == NULL)
-            die("Problème de connection");
+            die("Problème de connexion");
         ?>
         
-        <h2> Disponibilité des CDs </h2>
+        <h1> Disponibilité des CDs </h1>
 
         <?php
 
@@ -26,35 +98,35 @@ session_start();
 
         // Options disponibles pour l'attribut de tri
         $attributeOptions = [
+            'date' => 'Date de l\'événement',
             'title' => 'Titre du CD',
             'copies' => 'Nombre de copies',
-            'date' => 'Date de l\'événement',
         ];
 
         // Options disponibles pour le sens du tri
         $orderOptions = [
-            'asc' => 'Croissant',
             'desc' => 'Décroissant',
+            'asc' => 'Croissant',
         ];
 
         // Requête SQL avec le tri
-        $query = 'SELECT CD.TITLE, CD.COPIES, COUNT(*) AS copies_utilisees, EVENT.DATE
-                FROM CD
-                LEFT JOIN CONTAINS ON CD.CD_NUMBER = CONTAINS.CD_NUMBER
-                LEFT JOIN EVENT ON EVENT.PLAYLIST = CONTAINS.PLAYLIST
-                GROUP BY CD.CD_NUMBER, EVENT.DATE
+        $query = 'SELECT EVENT.DATE, CD.TITLE, CD.COPIES, COUNT(CONTAINS.PLAYLIST) AS copies_utilisees
+                FROM EVENT
+                LEFT JOIN CONTAINS ON EVENT.PLAYLIST = CONTAINS.PLAYLIST
+                LEFT JOIN CD ON CONTAINS.CD_NUMBER = CD.CD_NUMBER
+                GROUP BY EVENT.DATE, CD.CD_NUMBER
                 ORDER BY ';
 
         // Ajouter l'attribut et le sens du tri à la requête
-        if ($selectedAttribute === 'title') {
+        if ($selectedAttribute === 'date') {
+            $query .= 'EVENT.DATE';
+        } elseif ($selectedAttribute === 'title') {
             $query .= 'CD.TITLE';
         } elseif ($selectedAttribute === 'copies') {
             $query .= 'CD.COPIES';
-        } else {
-            $query .= 'EVENT.DATE';
         }
 
-        $query .= ($selectedOrder === 'asc') ? ' ASC' : ' DESC';
+        $query .= ($selectedOrder === 'desc') ? ' DESC' : ' ASC';
 
         $stmt = $bdd->prepare($query);
         $stmt->execute();
@@ -69,41 +141,40 @@ session_start();
         }
         echo '</select>';
 
-        echo ' Sens : ';
+        echo '&nbsp; Sens : ';
+
         echo '<select name="order">';
         foreach ($orderOptions as $value => $label) {
             $selected = ($value === $selectedOrder) ? 'selected' : '';
             echo '<option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
         }
         echo '</select>';
-
+        echo '&nbsp';
         echo '<input type="submit" value="Trier">';
         echo '</form>';
 
         echo '<table>';
         echo '<thead>';
         echo '<tr>';
+        echo '<th>Date de l\'événement</th>';
         echo '<th>Titre du CD</th>';
         echo '<th>Nombre de copies</th>';
         echo '<th>Copies utilisées</th>';
-        echo '<th>Date de l\'événement</th>';
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             echo '<tr>';
+            echo '<td>' . $row['DATE'] . '</td>';
             echo '<td>' . $row['TITLE'] . '</td>';
             echo '<td>' . $row['COPIES'] . '</td>';
             echo '<td>' . $row['copies_utilisees'] . '</td>';
-            echo '<td>' . $row['DATE'] . '</td>';
             echo '</tr>';
         }
 
         echo '</tbody>';
         echo '</table>';
-
-
-            ?>
+        ?>
     </body>
 </html>

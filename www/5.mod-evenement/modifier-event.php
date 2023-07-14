@@ -8,6 +8,78 @@ session_start();
 <html>
 <head>
     <title>5. Modifier événement </title>
+        <style>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="button"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-separator {
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
 <?php
