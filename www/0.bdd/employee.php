@@ -12,6 +12,7 @@ if ($bdd == NULL)
     echo "Problème de connection";
 // Traitement des filtres de recherche
 $nom_filter = isset($_POST['nom_filter']) ? $_POST['nom_filter'] : '';
+$prenom_filter = isset($_POST['prenom_filter']) ? $_POST['prenom_filter'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
 
 // Récupération des employées de la base de données
@@ -21,6 +22,11 @@ $parameters = array();
 if (!empty($nom_filter)) {
     $query .= " AND LASTNAME LIKE :nom";
     $parameters[':nom'] = '%' . $nom_filter . '%';
+}
+
+if (!empty($prenom_filter)) {
+    $query .= " AND FIRSTNAME LIKE :prenom";
+    $parameters[':prenom'] = '%' . $prenom_filter . '%';
 }
 
 if (!empty($numero_filtrer)) {
@@ -119,6 +125,9 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <br>
             <label for="numero_filtrer">Filtrer par numéro :</label>
             <input type="text" name="numero_filtrer" value="<?= $numero_filtrer ?>">
+            <br>
+            <label for="prenom_filter">Filtrer par prénom :</label>
+            <input type="text" name="prenom_filter" value="<?= $prenom_filter ?>">
             <br>
             <input type="submit" value="Rechercher">
         </form>

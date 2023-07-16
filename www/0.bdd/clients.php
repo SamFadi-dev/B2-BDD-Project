@@ -12,7 +12,10 @@ if ($bdd == NULL)
     echo "Problème de connection";
 // Traitement des filtres de recherche
 $nom_filter = isset($_POST['nom_filter']) ? $_POST['nom_filter'] : '';
+$prenom_filter = isset($_POST['prenom_filter']) ? $_POST['prenom_filter'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
+$email_filter = isset($_POST['email_filter']) ? $_POST['email_filter'] : '';
+$telephone_filter = isset($_POST['telephone_filter']) ? $_POST['telephone_filter'] : '';
 
 // Récupération des clients de la base de données
 $query = 'SELECT * FROM CLIENT WHERE 1=1';
@@ -23,9 +26,24 @@ if (!empty($nom_filter)) {
     $parameters[':nom'] = '%' . $nom_filter . '%';
 }
 
+if (!empty($prenom_filter)) {
+    $query .= " AND FIRST_NAME LIKE :prenom";
+    $parameters[':prenom'] = '%' . $prenom_filter . '%';
+}
+
 if (!empty($numero_filtrer)) {
-    $query .= " AND CLIENT_NUMBER = :numero";
-    $parameters[':numero'] = $numero_filtrer;
+    $query .= " AND CLIENT_NUMBER LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
+if (!empty($email_filter)) {
+    $query .= " AND EMAIL_ADDRESS LIKE :email";
+    $parameters[':email'] = '%' . $email_filter . '%';
+}
+
+if (!empty($telephone_filter)) {
+    $query .= " AND PHONE_NUMBER LIKE :telephone";
+    $parameters[':telephone'] = '%' . $telephone_filter . '%';
 }
 
 $stmt = $bdd->prepare($query);
@@ -117,8 +135,17 @@ $clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <label for="nom_filter">Filtrer par nom :</label>
             <input type="text" name="nom_filter" value="<?= $nom_filter ?>">
             <br>
+            <label for="prenom_filter">Filtrer par prénom :</label>
+            <input type="text" name="prenom_filter" value="<?= $prenom_filter ?>">
+            <br>
             <label for="numero_filtrer">Filtrer par numéro de client :</label>
             <input type="text" name="numero_filtrer" value="<?= $numero_filtrer ?>">
+            <br>
+            <label for="email_filter">Filtrer par email :</label>
+            <input type="text" name="email_filter" value="<?= $email_filter ?>">
+            <br>
+            <label for="telephone_filter">Filtrer par téléphone :</label>
+            <input type="text" name="telephone_filter" value="<?= $telephone_filter ?>">
             <br>
             <input type="submit" value="Rechercher">
         </form>

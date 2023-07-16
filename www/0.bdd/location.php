@@ -10,9 +10,13 @@ if (!isset($_SESSION['login'])) {
 $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
 if ($bdd == NULL)
     echo "Problème de connection";
+
 // Traitement des filtres de recherche
 $ville_filtrer = isset($_POST['ville_filtrer']) ? $_POST['ville_filtrer'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
+$rue_filtrer = isset($_POST['rue_filtrer']) ? $_POST['rue_filtrer'] : '';
+$code_postal_filtrer = isset($_POST['code_postal_filtrer']) ? $_POST['code_postal_filtrer'] : '';
+$pays_filtrer = isset($_POST['pays_filtrer']) ? $_POST['pays_filtrer'] : '';
 
 // Récupération des Villes de la base de données
 $query = 'SELECT * FROM LOCATION WHERE 1=1';
@@ -28,9 +32,25 @@ if (!empty($numero_filtrer)) {
     $parameters[':numero'] = $numero_filtrer;
 }
 
+if (!empty($rue_filtrer)) {
+    $query .= " AND STREET LIKE :rue";
+    $parameters[':rue'] = '%' . $rue_filtrer . '%';
+}
+
+if (!empty($code_postal_filtrer)) {
+    $query .= " AND POSTAL_CODE LIKE :code_postal";
+    $parameters[':code_postal'] = '%' . $code_postal_filtrer . '%';
+}
+
+if (!empty($pays_filtrer)) {
+    $query .= " AND COUNTRY LIKE :pays";
+    $parameters[':pays'] = '%' . $pays_filtrer . '%';
+}
+
 $stmt = $bdd->prepare($query);
 $stmt->execute($parameters);
 $villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -120,8 +140,18 @@ $villes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <label for="numero_filtrer">Filtrer par numéro :</label>
             <input type="text" name="numero_filtrer" value="<?= $numero_filtrer ?>">
             <br>
+            <label for="rue_filtrer">Filtrer par rue :</label>
+            <input type="text" name="rue_filtrer" value="<?= $rue_filtrer ?>">
+            <br>
+            <label for="code_postal_filtrer">Filtrer par code postal :</label>
+            <input type="text" name="code_postal_filtrer" value="<?= $code_postal_filtrer ?>">
+            <br>
+            <label for="pays_filtrer">Filtrer par pays :</label>
+            <input type="text" name="pays_filtrer" value="<?= $pays_filtrer ?>">
+            <br>
             <input type="submit" value="Rechercher">
         </form>
+
 
         <!-- Tableau des Villes -->
         <table>

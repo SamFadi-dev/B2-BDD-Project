@@ -10,27 +10,90 @@ if (!isset($_SESSION['login'])) {
 $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
 if ($bdd == NULL)
     echo "Problème de connection";
+    
 // Traitement des filtres de recherche
 $date_filtrer = isset($_POST['date_filtrer']) ? $_POST['date_filtrer'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
+$nom_filtrer = isset($_POST['nom_filtrer']) ? $_POST['nom_filtrer'] : '';
+$client_filtrer = isset($_POST['client_filtrer']) ? $_POST['client_filtrer'] : '';
+$manager_filtrer = isset($_POST['manager_filtrer']) ? $_POST['manager_filtrer'] : '';
+$plannificateur_filtrer = isset($_POST['plannificateur_filtrer']) ? $_POST['plannificateur_filtrer'] : '';
+$dj_filtrer = isset($_POST['dj_filtrer']) ? $_POST['dj_filtrer'] : '';
+$theme_filtrer = isset($_POST['theme_filtrer']) ? $_POST['theme_filtrer'] : '';
+$type_filtrer = isset($_POST['type_filtrer']) ? $_POST['type_filtrer'] : '';
+$localisation_filtrer = isset($_POST['localisation_filtrer']) ? $_POST['localisation_filtrer'] : '';
+$frais_filtrer = isset($_POST['frais_filtrer']) ? $_POST['frais_filtrer'] : '';
+$playlist_filtrer = isset($_POST['playlist_filtrer']) ? $_POST['playlist_filtrer'] : '';
 
 // Récupération des events de la base de données
 $query = 'SELECT * FROM EVENT WHERE 1=1';
 $parameters = array();
 
 if (!empty($date_filtrer)) {
-    $query .= " AND DATE = :date";
-    $parameters[':date'] = $date_filtrer;
+    $query .= " AND DATE LIKE :date";
+    $parameters[':date'] = '%' . $date_filtrer . '%';
 }
 
 if (!empty($numero_filtrer)) {
-    $query .= " AND ID = :numero";
-    $parameters[':numero'] = $numero_filtrer;
+    $query .= " AND ID LIKE :numero";
+    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+}
+
+if (!empty($nom_filtrer)) {
+    $query .= " AND NAME LIKE :nom";
+    $parameters[':nom'] = '%' . $nom_filtrer . '%';
+}
+
+if (!empty($client_filtrer)) {
+    $query .= " AND CLIENT LIKE :client";
+    $parameters[':client'] = '%' . $client_filtrer . '%';
+}
+
+if (!empty($manager_filtrer)) {
+    $query .= " AND MANAGER LIKE :manager";
+    $parameters[':manager'] = '%' . $manager_filtrer . '%';
+}
+
+if (!empty($plannificateur_filtrer)) {
+    $query .= " AND EVENT_PLANNER LIKE :plannificateur";
+    $parameters[':plannificateur'] = '%' . $plannificateur_filtrer . '%';
+}
+
+if (!empty($dj_filtrer)) {
+    $query .= " AND DJ LIKE :dj";
+    $parameters[':dj'] = '%' . $dj_filtrer . '%';
+}
+
+if (!empty($theme_filtrer)) {
+    $query .= " AND THEME LIKE :theme";
+    $parameters[':theme'] = '%' . $theme_filtrer . '%';
+}
+
+if (!empty($type_filtrer)) {
+    $query .= " AND TYPE LIKE :type";
+    $parameters[':type'] = '%' . $type_filtrer . '%';
+}
+
+if (!empty($localisation_filtrer)) {
+    $query .= " AND LOCATION LIKE :localisation";
+    $parameters[':localisation'] = '%' . $localisation_filtrer . '%';
+}
+
+if (!empty($frais_filtrer)) {
+    $query .= " AND RENTAL_FEE LIKE :frais";
+    $parameters[':frais'] = '%' . $frais_filtrer . '%';
+}
+
+if (!empty($playlist_filtrer)) {
+    $query .= " AND PLAYLIST LIKE :playlist";
+    $parameters[':playlist'] = '%' . $playlist_filtrer . '%';
 }
 
 $stmt = $bdd->prepare($query);
 $stmt->execute($parameters);
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -113,15 +176,46 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1>Events</h1>
 
         <!-- Formulaire de recherche -->
-        <form method="post" action="event.php">
-            <label for="date_filtrer">Filtrer par date :</label>
-            <input type="text" name="date_filtrer" value="<?= $date_filtrer ?>">
-            <br>
-            <label for="numero_filtrer">Filtrer par numéro :</label>
-            <input type="text" name="numero_filtrer" value="<?= $numero_filtrer ?>">
-            <br>
-            <input type="submit" value="Rechercher">
-        </form>
+    <form method="post" action="event.php">
+        <label for="date_filtrer">Filtrer par date :</label>
+        <input type="text" name="date_filtrer" value="<?= $date_filtrer ?>">
+        <br>
+        <label for="numero_filtrer">Filtrer par numéro :</label>
+        <input type="text" name="numero_filtrer" value="<?= $numero_filtrer ?>">
+        <br>
+        <label for="nom_filtrer">Filtrer par nom :</label>
+        <input type="text" name="nom_filtrer" value="<?= $nom_filtrer ?>">
+        <br>
+        <label for="client_filtrer">Filtrer par client :</label>
+        <input type="text" name="client_filtrer" value="<?= $client_filtrer ?>">
+        <br>
+        <label for="manager_filtrer">Filtrer par manager :</label>
+        <input type="text" name="manager_filtrer" value="<?= $manager_filtrer ?>">
+        <br>
+        <label for="plannificateur_filtrer">Filtrer par planificateur d'événement :</label>
+        <input type="text" name="plannificateur_filtrer" value="<?= $plannificateur_filtrer ?>">
+        <br>
+        <label for="dj_filtrer">Filtrer par DJ :</label>
+        <input type="text" name="dj_filtrer" value="<?= $dj_filtrer ?>">
+        <br>
+        <label for="theme_filtrer">Filtrer par thème :</label>
+        <input type="text" name="theme_filtrer" value="<?= $theme_filtrer ?>">
+        <br>
+        <label for="type_filtrer">Filtrer par type :</label>
+        <input type="text" name="type_filtrer" value="<?= $type_filtrer ?>">
+        <br>
+        <label for="localisation_filtrer">Filtrer par localisation :</label>
+        <input type="text" name="localisation_filtrer" value="<?= $localisation_filtrer ?>">
+        <br>
+        <label for="frais_filtrer">Filtrer par frais :</label>
+        <input type="text" name="frais_filtrer" value="<?= $frais_filtrer ?>">
+        <br>
+        <label for="playlist_filtrer">Filtrer par playlist :</label>
+        <input type="text" name="playlist_filtrer" value="<?= $playlist_filtrer ?>">
+        <br>
+        <input type="submit" value="Rechercher">
+    </form>
+
 
         <!-- Tableau des events -->
         <table>
