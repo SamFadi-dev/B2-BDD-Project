@@ -38,13 +38,13 @@ if (!empty($producteur_filtrer)) {
 }
 
 if (!empty($annees_filtrer)) {
-    $query .= " AND YEAR LIKE :annees";
-    $parameters[':annees'] = '%' . $annees_filtrer . '%';
+    $query .= " AND YEAR = :annees";
+    $parameters[':annees'] = $annees_filtrer;
 }
 
 if (!empty($copies_filtrer)) {
-    $query .= " AND COPIES LIKE :copies";
-    $parameters[':copies'] = '%' . $copies_filtrer . '%';
+    $query .= " AND COPIES = :copies";
+    $parameters[':copies'] = $copies_filtrer;
 }
 
 $stmt = $bdd->prepare($query);

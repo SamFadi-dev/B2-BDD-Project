@@ -88,28 +88,27 @@ session_start();
         ?>
 
         <h1> Liste des événements </h1>
-        <table>
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Client</th>
-            <th>Manager</th>
-            <th>Planificateur</th>
-            <th>DJ</th>
-            <th>Thème</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Frais (€)</th>
-            <th>Playlist</th>
-            <th>Coût total (€)</th>
-            <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
-
+            <table>
+            <thead>
+                <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Manager</th>
+                <th>Planificateur</th>
+                <th>DJ</th>
+                <th>Thème</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Frais (€)</th>
+                <th>Playlist</th>
+                <th>Coût total (€)</th>
+                <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
             <?php
             // Requête SQL pour récupérer les données de la table EVENT
             $query = 'SELECT *, 

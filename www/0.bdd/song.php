@@ -44,8 +44,8 @@ if (!empty($artiste_filtrer)) {
 }
 
 if (!empty($duree_filtrer)) {
-    $query .= " AND DURATION LIKE :duree";
-    $parameters[':duree'] = '%' . $duree_filtrer . '%';
+    $query .= " AND DURATION = :duree";
+    $parameters[':duree'] = $duree_filtrer;
 }
 
 if (!empty($genre_filtrer)) {

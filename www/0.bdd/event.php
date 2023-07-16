@@ -10,7 +10,7 @@ if (!isset($_SESSION['login'])) {
 $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
 if ($bdd == NULL)
     echo "Problème de connection";
-    
+
 // Traitement des filtres de recherche
 $date_filtrer = isset($_POST['date_filtrer']) ? $_POST['date_filtrer'] : '';
 $numero_filtrer = isset($_POST['numero_filtrer']) ? $_POST['numero_filtrer'] : '';
@@ -30,13 +30,13 @@ $query = 'SELECT * FROM EVENT WHERE 1=1';
 $parameters = array();
 
 if (!empty($date_filtrer)) {
-    $query .= " AND DATE LIKE :date";
-    $parameters[':date'] = '%' . $date_filtrer . '%';
+    $query .= " AND DATE = :date";
+    $parameters[':date'] = $date_filtrer;
 }
 
 if (!empty($numero_filtrer)) {
-    $query .= " AND ID LIKE :numero";
-    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+    $query .= " AND ID = :numero";
+    $parameters[':numero'] = $numero_filtrer;
 }
 
 if (!empty($nom_filtrer)) {
@@ -45,23 +45,23 @@ if (!empty($nom_filtrer)) {
 }
 
 if (!empty($client_filtrer)) {
-    $query .= " AND CLIENT LIKE :client";
-    $parameters[':client'] = '%' . $client_filtrer . '%';
+    $query .= " AND CLIENT = :client";
+    $parameters[':client'] = $client_filtrer;
 }
 
 if (!empty($manager_filtrer)) {
-    $query .= " AND MANAGER LIKE :manager";
-    $parameters[':manager'] = '%' . $manager_filtrer . '%';
+    $query .= " AND MANAGER = :manager";
+    $parameters[':manager'] = $manager_filtrer;
 }
 
 if (!empty($plannificateur_filtrer)) {
-    $query .= " AND EVENT_PLANNER LIKE :plannificateur";
-    $parameters[':plannificateur'] = '%' . $plannificateur_filtrer . '%';
+    $query .= " AND EVENT_PLANNER = :plannificateur";
+    $parameters[':plannificateur'] = $plannificateur_filtrer;
 }
 
 if (!empty($dj_filtrer)) {
-    $query .= " AND DJ LIKE :dj";
-    $parameters[':dj'] = '%' . $dj_filtrer . '%';
+    $query .= " AND DJ = :dj";
+    $parameters[':dj'] = $dj_filtrer;
 }
 
 if (!empty($theme_filtrer)) {
@@ -75,8 +75,8 @@ if (!empty($type_filtrer)) {
 }
 
 if (!empty($localisation_filtrer)) {
-    $query .= " AND LOCATION LIKE :localisation";
-    $parameters[':localisation'] = '%' . $localisation_filtrer . '%';
+    $query .= " AND LOCATION = :localisation";
+    $parameters[':localisation'] = $localisation_filtrer;
 }
 
 if (!empty($frais_filtrer)) {

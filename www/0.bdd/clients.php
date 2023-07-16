@@ -32,8 +32,8 @@ if (!empty($prenom_filter)) {
 }
 
 if (!empty($numero_filtrer)) {
-    $query .= " AND CLIENT_NUMBER LIKE :numero";
-    $parameters[':numero'] = '%' . $numero_filtrer . '%';
+    $query .= " AND CLIENT_NUMBER = :numero";
+    $parameters[':numero'] = $numero_filtrer;
 }
 
 if (!empty($email_filter)) {
@@ -42,8 +42,8 @@ if (!empty($email_filter)) {
 }
 
 if (!empty($telephone_filter)) {
-    $query .= " AND PHONE_NUMBER LIKE :telephone";
-    $parameters[':telephone'] = '%' . $telephone_filter . '%';
+    $query .= " AND PHONE_NUMBER = :telephone";
+    $parameters[':telephone'] = $telephone_filter;
 }
 
 $stmt = $bdd->prepare($query);

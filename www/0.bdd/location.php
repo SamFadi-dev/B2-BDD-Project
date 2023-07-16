@@ -38,8 +38,8 @@ if (!empty($rue_filtrer)) {
 }
 
 if (!empty($code_postal_filtrer)) {
-    $query .= " AND POSTAL_CODE LIKE :code_postal";
-    $parameters[':code_postal'] = '%' . $code_postal_filtrer . '%';
+    $query .= " AND POSTAL_CODE = :code_postal";
+    $parameters[':code_postal'] = $code_postal_filtrer;
 }
 
 if (!empty($pays_filtrer)) {
