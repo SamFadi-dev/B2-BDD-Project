@@ -9,7 +9,6 @@ session_start();
 <head>
     <title>5. Modifier événement </title>
         <style>
-        <style>
         body {
             font-family: Arial, sans-serif;
         }
@@ -127,6 +126,8 @@ try {
     $stmt->execute();
     $playlists = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $bdd->commit();
+
     ?>
     <h1>Modifier un événement</h1>
     <form method="post" action="modifier-event.php">
@@ -139,9 +140,9 @@ try {
             </select><br>
             
             <label for="Nom">Nom :</label>
-            <input type="text" name="Nom" id="Nom" optional><br>
+            <input type="text" name="Nom" id="Nom"><br>
             <label for="Description">Description :</label>
-            <input type="text" name="Description" id="Description" optional><br>
+            <input type="text" name="Description" id="Description"><br>
             <label for="Manager">Sélectionnez un manager pour l'événement :</label>
             <select name="Manager" id="Manager">
                 <?php foreach ($managers as $manager): ?>
@@ -171,7 +172,7 @@ try {
             </select><br>
 
             <label for="Type">Type d'événement :</label>
-            <input type="text" name="Type" id="Type" optional><br>
+            <input type="text" name="Type" id="Type"><br>
             <label for="Location">Sélectionnez un lieu pour l'événement :</label>
             <select name="Location" id="Location">
                 <?php foreach ($locations as $location): ?>
@@ -181,7 +182,7 @@ try {
             </select><br>
 
             <label for="Frais">Frais de location :</label>
-            <input type="text" name="Frais" id="Frais" optional><br>
+            <input type="text" name="Frais" id="Frais"><br>
             <label for="Playlist">Sélectionnez une playlist pour l'événement :</label>
             <select name="Playlist" id="Playlist">
                 <?php foreach ($playlists as $playlist): ?>
@@ -194,6 +195,8 @@ try {
 
     <?php
     if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+        $bdd->beginTransaction();
+
         // Obtient les informations actuelles de l'événement à modifier
         $query = "SELECT * FROM EVENT WHERE ID = :ID";
         $stmt = $bdd->prepare($query);

@@ -6,10 +6,9 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>4. Gestion des CDs</title>
-        <style>
-
+<head>
+    <title>4. Gestion des CDs</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
         }
@@ -80,101 +79,109 @@ session_start();
             border-top: 1px solid #ddd;
         }
     </style>
-    </head>
-    <body>
-        <?php
-        $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
-        if ($bdd == NULL)
-            die("Problème de connexion");
-        ?>
-        
-        <h1> Disponibilité des CDs </h1>
+</head>
+<body>
+<?php
+$bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
+if ($bdd == null) {
+    die("Problème de connexion");
+}
 
-        <?php
+try {
+    $bdd->beginTransaction();
 
-        // Récupérer les valeurs sélectionnées pour l'attribut et le sens du tri (s'ils existent)
-        $selectedAttribute = isset($_GET['attribute']) ? $_GET['attribute'] : 'date';
-        $selectedOrder = isset($_GET['order']) ? $_GET['order'] : 'desc';
+    echo '<h1>Disponibilité des CDs</h1>';
 
-        // Options disponibles pour l'attribut de tri
-        $attributeOptions = [
-            'date' => 'Date de l\'événement',
-            'title' => 'Titre du CD',
-            'copies' => 'Nombre de copies',
-        ];
+    // Récupérer les valeurs sélectionnées pour l'attribut et le sens du tri (s'ils existent)
+    $selectedAttribute = isset($_GET['attribute']) ? $_GET['attribute'] : 'date';
+    $selectedOrder = isset($_GET['order']) ? $_GET['order'] : 'desc';
 
-        // Options disponibles pour le sens du tri
-        $orderOptions = [
-            'desc' => 'Décroissant',
-            'asc' => 'Croissant',
-        ];
+    // Options disponibles pour l'attribut de tri
+    $attributeOptions = [
+        'date' => 'Date de l\'événement',
+        'title' => 'Titre du CD',
+        'copies' => 'Nombre de copies',
+    ];
 
-        // Requête SQL avec le tri
-        $query = 'SELECT EVENT.DATE, CD.TITLE, CD.COPIES, COUNT(CONTAINS.PLAYLIST) AS copies_utilisees
-                FROM EVENT
-                LEFT JOIN CONTAINS ON EVENT.PLAYLIST = CONTAINS.PLAYLIST
-                LEFT JOIN CD ON CONTAINS.CD_NUMBER = CD.CD_NUMBER
-                GROUP BY EVENT.DATE, CD.CD_NUMBER
-                ORDER BY ';
+    // Options disponibles pour le sens du tri
+    $orderOptions = [
+        'desc' => 'Décroissant',
+        'asc' => 'Croissant',
+    ];
 
-        // Ajouter l'attribut et le sens du tri à la requête
-        if ($selectedAttribute === 'date') {
-            $query .= 'EVENT.DATE';
-        } elseif ($selectedAttribute === 'title') {
-            $query .= 'CD.TITLE';
-        } elseif ($selectedAttribute === 'copies') {
-            $query .= 'CD.COPIES';
-        }
+    // Requête SQL avec le tri
+    $query = 'SELECT EVENT.DATE, CD.TITLE, CD.COPIES, COUNT(CONTAINS.PLAYLIST) AS copies_utilisees
+            FROM EVENT
+            LEFT JOIN CONTAINS ON EVENT.PLAYLIST = CONTAINS.PLAYLIST
+            LEFT JOIN CD ON CONTAINS.CD_NUMBER = CD.CD_NUMBER
+            GROUP BY EVENT.DATE, CD.CD_NUMBER
+            ORDER BY ';
 
-        $query .= ($selectedOrder === 'desc') ? ' DESC' : ' ASC';
+    // Ajouter l'attribut et le sens du tri à la requête
+    if ($selectedAttribute === 'date') {
+        $query .= 'EVENT.DATE';
+    } elseif ($selectedAttribute === 'title') {
+        $query .= 'CD.TITLE';
+    } elseif ($selectedAttribute === 'copies') {
+        $query .= 'CD.COPIES';
+    }
 
-        $stmt = $bdd->prepare($query);
-        $stmt->execute();
+    $query .= ($selectedOrder === 'desc') ? ' DESC' : ' ASC';
 
-        // Affichage du tableau avec les listes déroulantes
-        echo '<form method="GET">';
-        echo 'Trier par : ';
-        echo '<select name="attribute">';
-        foreach ($attributeOptions as $value => $label) {
-            $selected = ($value === $selectedAttribute) ? 'selected' : '';
-            echo '<option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
-        }
-        echo '</select>';
+    $stmt = $bdd->prepare($query);
+    $stmt->execute();
 
-        echo '&nbsp; Sens : ';
+    // Affichage du tableau avec les listes déroulantes
+    echo '<form method="GET">';
+    echo 'Trier par : ';
+    echo '<select name="attribute">';
+    foreach ($attributeOptions as $value => $label) {
+        $selected = ($value === $selectedAttribute) ? 'selected' : '';
+        echo '<option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
+    }
+    echo '</select>';
 
-        echo '<select name="order">';
-        foreach ($orderOptions as $value => $label) {
-            $selected = ($value === $selectedOrder) ? 'selected' : '';
-            echo '<option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
-        }
-        echo '</select>';
-        echo '&nbsp';
-        echo '<input type="submit" value="Trier">';
-        echo '</form>';
+    echo '&nbsp; Sens : ';
 
-        echo '<table>';
-        echo '<thead>';
+    echo '<select name="order">';
+    foreach ($orderOptions as $value => $label) {
+        $selected = ($value === $selectedOrder) ? 'selected' : '';
+        echo '<option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
+    }
+    echo '</select>';
+    echo '&nbsp';
+    echo '<input type="submit" value="Trier">';
+    echo '</form>';
+
+    echo '<table>';
+    echo '<thead>';
+    echo '<tr>';
+    echo '<th>Date de l\'événement</th>';
+    echo '<th>Titre du CD</th>';
+    echo '<th>Nombre de copies</th>';
+    echo '<th>Copies utilisées</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo '<tr>';
-        echo '<th>Date de l\'événement</th>';
-        echo '<th>Titre du CD</th>';
-        echo '<th>Nombre de copies</th>';
-        echo '<th>Copies utilisées</th>';
+        echo '<td>' . $row['DATE'] . '</td>';
+        echo '<td>' . $row['TITLE'] . '</td>';
+        echo '<td>' . $row['COPIES'] . '</td>';
+        echo '<td>' . $row['copies_utilisees'] . '</td>';
         echo '</tr>';
-        echo '</thead>';
-        echo '<tbody>';
+    }
 
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo '<tr>';
-            echo '<td>' . $row['DATE'] . '</td>';
-            echo '<td>' . $row['TITLE'] . '</td>';
-            echo '<td>' . $row['COPIES'] . '</td>';
-            echo '<td>' . $row['copies_utilisees'] . '</td>';
-            echo '</tr>';
-        }
+    echo '</tbody>';
+    echo '</table>';
 
-        echo '</tbody>';
-        echo '</table>';
-        ?>
-    </body>
+    $bdd->commit();
+
+} catch (PDOException $e) {
+    $bdd->rollback();
+    echo 'Erreur : ' . $e->getMessage();
+}
+?>
+</body>
 </html>

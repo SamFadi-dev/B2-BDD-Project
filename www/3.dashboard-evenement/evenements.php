@@ -1,14 +1,14 @@
 <?php
 //-------------------------------------------------
-//-----------CODE PRINCIPALE QUESTION 3------------
+//-----------CODE PRINCIPAL QUESTION 3------------
 //-------------------------------------------------
 session_start();
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>3. Gestion des événements</title>
-        <style>
+<head>
+    <title>3. Gestion des événements</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
         }
@@ -79,77 +79,73 @@ session_start();
             border-top: 1px solid #ddd;
         }
     </style>
-    </head>
-    <body>
-        <?php
-        $bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
-        if ($bdd == NULL)
-            die("Problème de connection");
-        ?>
+</head>
+<body>
+<?php
+$bdd = new PDO('mysql:host=ms8db;dbname=groupXX', 'groupXX', 'secret');
+if ($bdd == NULL)
+    die("Problème de connexion");
+?>
 
-        <h1> Liste des événements </h1>
-            <table>
-            <thead>
-                <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Client</th>
-                <th>Manager</th>
-                <th>Planificateur</th>
-                <th>DJ</th>
-                <th>Thème</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Frais (€)</th>
-                <th>Playlist</th>
-                <th>Coût total (€)</th>
-                <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php
-            // Requête SQL pour récupérer les données de la table EVENT
-            $query = 'SELECT *, 
-            CASE
-                WHEN DATE < DATE(NOW()) THEN "PASSÉ"
-                WHEN DATE > DATE(NOW()) THEN "FUTUR"
-                ELSE "AUJOURD\'HUI"
-            END AS STATUT,
-            (1500 + COALESCE(RENTAL_FEE, 0)) AS TOTALCOUNT
-            FROM EVENT
-            ORDER BY DATE DESC, NAME ASC';
-        
+<h1>Liste des événements</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Client</th>
+        <th>Manager</th>
+        <th>Planificateur</th>
+        <th>DJ</th>
+        <th>Thème</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Frais (€)</th>
+        <th>Playlist</th>
+        <th>Coût total (€)</th>
+        <th>Statut</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    // Requête SQL pour récupérer les données de la table EVENT et trier selon la date d'ajd
+    $query = 'SELECT *, 
+        CASE
+            WHEN DATE < DATE(NOW()) THEN "PASSÉ"
+            WHEN DATE > DATE(NOW()) THEN "FUTUR"
+            ELSE "AUJOURD\'HUI"
+        END AS STATUT,
+        ABS(DATEDIFF(DATE, NOW())) AS DIFF_DATE
+        FROM EVENT
+        ORDER BY DIFF_DATE, NAME ASC';
 
-            $stmt = $bdd->query($query);
+    $stmt = $bdd->query($query);
 
+    while ($row = $stmt->fetch()) {
+        // Affichage de chaque ligne de la table sous forme de ligne de tableau
+        echo "<tr>";
+        echo "<td>" . $row['ID'] . "</td>";
+        echo "<td>" . $row['NAME'] . "</td>";
+        echo "<td>" . $row['DATE'] . "</td>";
+        echo "<td>" . $row['DESCRIPTION'] . "</td>";
+        echo "<td>" . $row['CLIENT'] . "</td>";
+        echo "<td>" . $row['MANAGER'] . "</td>";
+        echo "<td>" . $row['EVENT_PLANNER'] . "</td>";
+        echo "<td>" . $row['DJ'] . "</td>";
+        echo "<td>" . $row['THEME'] . "</td>";
+        echo "<td>" . $row['TYPE'] . "</td>";
+        echo "<td>" . $row['LOCATION'] . "</td>";
+        echo "<td>" . $row['RENTAL_FEE'] . "</td>";
+        echo "<td>" . $row['PLAYLIST'] . "</td>";
+        echo "<td>" . $row['TOTALCOUNT'] . "</td>";
+        echo "<td>" . $row['STATUT'] . "</td>";
+        echo "</tr>";
+    }
+    ?>
+    </tbody>
+</table>
 
-            while ($row = $stmt->fetch()) {
-            // Affichage de chaque ligne de la table sous forme de ligne de tableau
-
-                echo "<tr>";
-                echo "<td>" . $row['ID'] . "</td>";
-                echo "<td>" . $row['NAME'] . "</td>";
-                echo "<td>" . $row['DATE'] . "</td>";
-                echo "<td>" . $row['DESCRIPTION'] . "</td>";
-                echo "<td>" . $row['CLIENT'] . "</td>";
-                echo "<td>" . $row['MANAGER'] . "</td>";
-                echo "<td>" . $row['EVENT_PLANNER'] . "</td>";
-                echo "<td>" . $row['DJ'] . "</td>";
-                echo "<td>" . $row['THEME'] . "</td>";
-                echo "<td>" . $row['TYPE'] . "</td>";
-                echo "<td>" . $row['LOCATION'] . "</td>";
-                echo "<td>" . $row['RENTAL_FEE'] . "</td>";
-                echo "<td>" . $row['PLAYLIST'] . "</td>";
-                echo "<td>" . $row['TOTALCOUNT'] . "</td>";
-                echo "<td>" . $row['STATUT'] . "</td>";
-                echo "</tr>";
-            }
-            ?>
-    
-        </tbody>
-        </table>   
-        
-    </body>
+</body>
 </html>

@@ -88,17 +88,18 @@ session_start();
         $bdd->beginTransaction();
 
         $query = "SELECT CD.CD_NUMBER, CD.TITLE,
-                    SEC_TO_TIME(SUM(TIME_TO_SEC(SONG.DURATION))) AS total_temps,
-                    SEC_TO_TIME(MAX(TIME_TO_SEC(SONG.DURATION))) AS max_temps,
-                    SEC_TO_TIME(MIN(TIME_TO_SEC(SONG.DURATION))) AS min_temps,
-                    SEC_TO_TIME(AVG(TIME_TO_SEC(SONG.DURATION))) AS avg_temps,
-                    COUNT(CONTAINS.PLAYLIST) AS playlist_nbr,
-                    GROUP_CONCAT(DISTINCT GENRE.NAME SEPARATOR ', ') AS related_genres
-                FROM CD
-                LEFT JOIN SONG ON CD.CD_NUMBER = SONG.CD_NUMBER
-                LEFT JOIN CONTAINS ON CD.CD_NUMBER = CONTAINS.CD_NUMBER
-                LEFT JOIN GENRE ON SONG.GENRE = GENRE.NAME
-                GROUP BY CD.CD_NUMBER, CD.TITLE";
+                SEC_TO_TIME(SUM(TIME_TO_SEC(SONG.DURATION))) AS total_temps,
+                SEC_TO_TIME(MAX(TIME_TO_SEC(SONG.DURATION))) AS max_temps,
+                SEC_TO_TIME(MIN(TIME_TO_SEC(SONG.DURATION))) AS min_temps,
+                SEC_TO_TIME(AVG(TIME_TO_SEC(SONG.DURATION))) AS avg_temps,
+                COUNT(CONTAINS.PLAYLIST) AS playlist_nbr,
+                GROUP_CONCAT(DISTINCT GENRE.NAME SEPARATOR ', ') AS related_genres
+            FROM CD
+            LEFT JOIN SONG USING (CD_NUMBER)
+            LEFT JOIN CONTAINS USING (CD_NUMBER)
+            LEFT JOIN GENRE USING (NAME)
+            GROUP BY CD.CD_NUMBER";
+
 
         $stmt = $bdd->prepare($query);
         $stmt->execute();
