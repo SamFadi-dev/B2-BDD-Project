@@ -95,10 +95,10 @@ session_start();
                 COUNT(CONTAINS.PLAYLIST) AS playlist_nbr,
                 GROUP_CONCAT(DISTINCT GENRE.NAME SEPARATOR ', ') AS related_genres
             FROM CD
-            LEFT JOIN SONG USING (CD_NUMBER)
-            LEFT JOIN CONTAINS USING (CD_NUMBER)
-            LEFT JOIN GENRE USING (NAME)
-            GROUP BY CD.CD_NUMBER";
+            LEFT JOIN SONG ON CD.CD_NUMBER = SONG.CD_NUMBER
+            LEFT JOIN CONTAINS ON CD.CD_NUMBER = CONTAINS.CD_NUMBER
+            LEFT JOIN GENRE ON SONG.GENRE = GENRE.NAME
+            GROUP BY CD.CD_NUMBER, CD.TITLE";
 
 
         $stmt = $bdd->prepare($query);
