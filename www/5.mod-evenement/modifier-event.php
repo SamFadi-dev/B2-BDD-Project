@@ -223,6 +223,7 @@ try {
         if ($date >= strtotime($previousEvent["DATE"])) {
             $flag = 1;
         }
+        
         $query = "SELECT * FROM EVENT WHERE MANAGER = :MANAGER AND DATE = :DATE AND ID <> :ID";
         $stmt = $bdd->prepare($query);
         $stmt->bindParam(":MANAGER", $MANAGER);

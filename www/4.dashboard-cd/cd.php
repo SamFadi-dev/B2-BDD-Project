@@ -137,6 +137,7 @@ try {
     $stmt = $bdd->prepare($query);
     $stmt->execute();
 
+    
     // Affichage du tableau avec les listes déroulantes
     echo '<form method="GET">';
     echo 'Trier par : ';
