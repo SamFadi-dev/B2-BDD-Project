@@ -1,4 +1,6 @@
 <?php
+/* The code is a PHP script that creates a login system for the party management system. */
+
 session_start();
 ?>
 <!DOCTYPE html>
@@ -113,7 +115,7 @@ if (isset($_SESSION['login'])) {
             <li><a href="./1.mod-lieu/gestion-lieux.php" target="_blank">1. Gestion des localisations</a></li>
             <li><a href="./2.choix-cd/choix-cd.php" target="_blank">2. Gestion des CDs</a></li>
             <li><a href="./3.dashboard-evenement/evenements.php" target="_blank">3. Tableau de bord des événements</a></li>
-            <li><a href="./4.dashboard-cd/cd.php" target="_blank">4. Tableau de bord des CDs</a></li>
+            <li><a href="./4.dashboard-cd/cd.php" target="_blank">4. Disponibilité des CDs</a></li>
             <li><a href="./5.mod-evenement/modifier-event.php" target="_blank">5. Modifier un événement</a></li>
             <li><a href="./6.tab-cd/CDInfo.php" target="_blank">6. Tableau de bord des CDs</a></li>
         </ul>

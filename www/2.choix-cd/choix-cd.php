@@ -136,7 +136,8 @@ session_start();
                 echo '<h2>Liste de chansons dans le CD:</h2>';
                 echo '<ul>';
                 foreach ($chansons as $chanson) {
-                    echo '<li>'. $chanson['TRACK_NUMBER']. '. ' . $chanson['TITLE'] . ' | ' .$chanson['ARTIST'] . ' | ' .$chanson['DURATION'] . ' | ' .$chanson['GENRE'] .'.</li>';
+                    echo '<li>'. $chanson['TRACK_NUMBER']. '. ' . $chanson['TITLE'] . ' | ' .$chanson['ARTIST'] . ' | ' .$chanson['DURATION'] .
+                         ' | ' .$chanson['GENRE'] .'.</li>';
                 }
                 
                 echo '</ul>';
@@ -188,6 +189,7 @@ session_start();
 
                 echo '<div class="form-separator"></div>';
 
+                
                 echo '<h2>Ajouter une chanson dans le CD</h2>';
                 $cd = $_POST['cds'];
                 
@@ -214,6 +216,7 @@ session_start();
                 echo '</form>';
 
                 echo '<div class="form-separator"></div>';
+
 
                 echo '<h2>Supprimer une chanson</h2>';
                 $cd = $_POST['cds'];

@@ -111,6 +111,7 @@ session_start();
                 </tr>
             </thead>
             <tbody>
+
             <?php
             // Requête SQL pour récupérer les données de la table EVENT
             $query = 'SELECT *, 

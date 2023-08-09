@@ -107,6 +107,7 @@ session_start();
         $stmt->execute();
         $CDs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        //Affichage de la table
         echo '<table>';
         echo '<thead>';
         echo '<tr>';
