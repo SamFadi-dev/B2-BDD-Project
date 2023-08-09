@@ -1,4 +1,8 @@
 <?php
+/* The above code is a PHP script that allows users to modify an event in a database. It starts by
+establishing a connection to the database and retrieving all the necessary information about the
+events, managers, DJs, planners, locations, themes, and playlists. */
+
 //-------------------------------------------------
 //-----------CODE PRINCIPAL QUESTION 5------------
 //-------------------------------------------------

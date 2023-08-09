@@ -1,4 +1,6 @@
 <?php
+/* The code provided is a PHP script that generates a web page displaying a dashboard for CDs. */
+
 session_start();
 ?>
 <!DOCTYPE html>

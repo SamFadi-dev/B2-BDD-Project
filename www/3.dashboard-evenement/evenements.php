@@ -1,4 +1,6 @@
 <?php
+/* The code provided is a PHP script that generates an HTML table displaying a list of events. */
+
 //-------------------------------------------------
 //-----------CODE PRINCIPALE QUESTION 3------------
 //-------------------------------------------------

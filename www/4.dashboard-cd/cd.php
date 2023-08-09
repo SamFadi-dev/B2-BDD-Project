@@ -1,4 +1,10 @@
 <?php
+/* This code is a PHP script that generates an HTML page for managing CDs. It connects to a MySQL
+database, retrieves data from the database, and displays it in a table. The table can be sorted by
+different attributes (date, title, copies) in ascending or descending order. The user can select the
+sorting options using dropdown menus and submit the form to update the table. The code also handles
+exceptions and rolls back the transaction if an error occurs. */
+
 //-------------------------------------------------
 //-----------CODE PRINCIPAL QUESTION 4------------
 //-------------------------------------------------

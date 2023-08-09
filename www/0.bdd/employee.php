@@ -1,4 +1,7 @@
 <?php
+/* This is a PHP script that displays a list of employees from a database and allows the user to filter
+the results based on name and number. */
+
 session_start();
 
 // Vérifier que l'utilisateur est connecté

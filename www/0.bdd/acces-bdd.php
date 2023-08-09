@@ -1,4 +1,6 @@
 <?php
+/* The code provided is a PHP script that generates an HTML page where the admin can acces de db. */
+
 //-------------------------------------------------
 //-----------CODE PRINCIPALE QUESTION 0------------
 //-------------------------------------------------

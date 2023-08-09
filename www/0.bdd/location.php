@@ -1,4 +1,7 @@
 <?php
+/* This is a PHP script that displays a list of cities from a database and allows the user to filter
+the cities based on various criteria. */
+
 session_start();
 
 // Vérifier que l'utilisateur est connecté

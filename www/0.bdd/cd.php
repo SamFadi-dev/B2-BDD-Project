@@ -1,4 +1,6 @@
 <?php
+/* This is a PHP script that displays a webpage for managing CDs in a database. */
+
 session_start();
 
 // Vérifier que l'utilisateur est connecté

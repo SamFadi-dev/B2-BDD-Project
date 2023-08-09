@@ -1,4 +1,11 @@
 <?php
+/* The above code is a PHP script that displays a table of events from a database. It first checks if
+the user is logged in, and if not, redirects them to a login page. It then connects to the database
+and retrieves events based on various filters provided by the user through a form. The events are
+displayed in a table with columns for the event number, name, date, description, client, manager,
+event planner, DJ, theme, type, location, rental fee, and playlist. The user can also log out using
+a separate form. */
+
 session_start();
 
 // Vérifier que l'utilisateur est connecté

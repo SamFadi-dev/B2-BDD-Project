@@ -1,4 +1,8 @@
 <?php
+/* This PHP code is a script that displays a list of clients from a database. It allows the user to
+filter the clients based on various criteria such as name, email, and phone number. The script also
+includes a form for the user to log out. */
+
 session_start();
 
 // Vérifier que l'utilisateur est connecté

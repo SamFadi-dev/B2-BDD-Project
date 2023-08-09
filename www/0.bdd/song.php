@@ -1,4 +1,8 @@
 <?php
+/* The above code is a PHP script that displays a list of songs from a database. It first checks if the
+user is logged in by checking the session variable 'login'. If the user is not logged in, it
+redirects them to the 'acces-bdd.php' page. */
+
 session_start();
 
 // Vérifier que l'utilisateur est connecté
