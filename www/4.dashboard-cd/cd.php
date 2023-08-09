@@ -9,7 +9,7 @@ session_start();
 <head>
     <title>4. Gestion des CDs</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
         }
 
@@ -109,7 +109,7 @@ try {
         'asc' => 'Croissant',
     ];
 
-    // Requête SQL avec le tri
+    // Requête SQL avec le tri et les agrégations
     $query = 'SELECT EVENT.DATE, CD.TITLE, CD.COPIES, COUNT(CONTAINS.PLAYLIST) AS copies_utilisees
             FROM EVENT
             LEFT JOIN CONTAINS ON EVENT.PLAYLIST = CONTAINS.PLAYLIST

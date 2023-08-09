@@ -80,8 +80,8 @@ if (!empty($localisation_filtrer)) {
 }
 
 if (!empty($frais_filtrer)) {
-    $query .= " AND RENTAL_FEE LIKE :frais";
-    $parameters[':frais'] = '%' . $frais_filtrer . '%';
+    $query .= " AND RENTAL_FEE = :frais";
+    $parameters[':frais'] = $frais_filtrer;
 }
 
 if (!empty($playlist_filtrer)) {

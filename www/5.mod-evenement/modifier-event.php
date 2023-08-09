@@ -88,8 +88,6 @@ if ($bdd == NULL) {
 }
 
 try {
-    $bdd->beginTransaction();
-
     // Requêtes pour récupérer toutes les informations sur les événements
     $query = 'SELECT * FROM EVENT';
     $stmt = $bdd->prepare($query);
@@ -125,8 +123,6 @@ try {
     $stmt = $bdd->prepare($query);
     $stmt->execute();
     $playlists = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $bdd->commit();
 
     ?>
     <h1>Modifier un événement</h1>
